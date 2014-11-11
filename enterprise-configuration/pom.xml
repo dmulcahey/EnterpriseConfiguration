@@ -30,5 +30,6 @@
 
 	<modules>
 		<module>enterprise-configuration-core</module>
+		<module>enterprise-configuration-test-resources</module>
 	</modules>
 </project>

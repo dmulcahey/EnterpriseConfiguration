@@ -1,79 +1,58 @@
 package com.bms.enterpriseconfiguration.core;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=TestClasspathScanning.class)
-@Configuration
+import com.google.common.collect.Sets;
+import com.google.common.reflect.ClassPath;
+
 public class TestClasspathScanning {
-
-	@Value("classpath*:ComponentResources/**/*.*")
-	private Resource[] componentResources;
-	
-	@Value("classpath*:SharedResources/**/*.*")
-	private Resource[] sharedResources;
-	
-	@Value("classpath*:SecureResources/#{systemProperties['server.env']}/**/*.*")
-	private Resource[] secureResources;
-	
-	@Value("classpath*:EnvironmentResources/#{systemProperties['server.env']}/**/*.*")
-	private Resource[] environmentResources;
-	
-	@BeforeClass
-	public static void setup(){
-		System.setProperty("server.env", "JUNIT");
-	}
 	
 	@Test
 	public void testComponentResources() throws IOException{
-		assertNotNull(componentResources);
-		for(Resource resource : componentResources){
-			String path = resource.getURL().toExternalForm();
-			Logger.getAnonymousLogger().info(path.substring(path.lastIndexOf("/") + 1));
-			
-			String[] segments = resource.getURL().toExternalForm().split("/");
-			boolean next = false;
-			for(String segment : segments){
-				if(next){
-					next = false;
-					Logger.getAnonymousLogger().info("Component Name = " + segment);
-				}else{
-					if(segment.equalsIgnoreCase("ComponentResources")){
-						next = true;
+		Map<String, ResourceInfoCollection> resourceCollections = new AbstractResourceInfoCollectionResolver(){
+			@Override
+			protected Set<ResourceLocatorProvider> getResourceLocatorProviders() {
+				Set<ResourceLocatorProvider> resourceLocatorProviders = Sets.newHashSet();
+				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+					@Override
+					public String getResourceLocator() {
+						return "ComponentResources";
 					}
-				}
+				});
+				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+					@Override
+					public String getResourceLocator() {
+						return "EnvironmentResources";
+					}
+				});
+				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+					@Override
+					public String getResourceLocator() {
+						return "SharedResources";
+					}
+				});
+				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+					@Override
+					public String getResourceLocator() {
+						return "SecureResources";
+					}
+				});
+				return resourceLocatorProviders;
 			}
-			
-			
-		}
+		}.resolve(ClassPath.from(Thread.currentThread().getContextClassLoader()));
 		
-		assertNotNull(sharedResources);
-		for(Resource resource : sharedResources){
-			Logger.getAnonymousLogger().info(resource.getURL().toExternalForm());
-		}
+		assertNotNull(resourceCollections);
+		assertEquals(4, resourceCollections.size());
 		
-		assertNotNull(secureResources);
-		for(Resource resource : secureResources){
-			Logger.getAnonymousLogger().info(resource.getURL().toExternalForm());
-		}
+		Logger.getAnonymousLogger().info(resourceCollections.toString());
 		
-		assertNotNull(environmentResources);
-		for(Resource resource : environmentResources){
-			Logger.getAnonymousLogger().info(resource.getURL().toExternalForm());
-		}
 	}
-	
 	
 }
