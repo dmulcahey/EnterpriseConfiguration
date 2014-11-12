@@ -27,6 +27,9 @@ public class ResourceInfoCollectionResolver extends AbstractResolver<Set<Resourc
 			resourceInfoCollection.getResources().addAll(Sets.filter(resourceInformation, new Predicate<ResourceInfo>(){
 				@Override
 				public boolean apply(ResourceInfo input) {
+					if(resourceLocatorProvider.getExcludesLocator().isPresent()){
+						return input.getResourceName().contains(resourceLocatorProvider.getResourceLocator()) && !input.getResourceName().contains(resourceLocatorProvider.getExcludesLocator().get());
+					}
 					return input.getResourceName().contains(resourceLocatorProvider.getResourceLocator());
 				}
 			}));
