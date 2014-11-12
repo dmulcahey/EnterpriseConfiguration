@@ -16,11 +16,13 @@ public class TestClasspathScanning {
 	
 	@Test
 	public void testComponentResources() throws IOException{
-		Map<String, ResourceInfoCollection> resourceCollections = new AbstractResourceInfoCollectionResolver(){
-		}.resolve(Sets.newHashSet(ResourceLocatorProviderFactory.create("ComponentResources", 2),
-				ResourceLocatorProviderFactory.create("EnvironmentResources", 1),
-				ResourceLocatorProviderFactory.create("SharedResources", 0),
-				ResourceLocatorProviderFactory.create("SecureResources", 3)));
+		Map<String, ResourceInfoCollection> resourceCollections = new ResourceInfoCollectionResolver().resolve(
+				Sets.newHashSet(
+						ResourceLocatorProviderFactory.create("ComponentResources", 2),
+						ResourceLocatorProviderFactory.create("EnvironmentResources", 1),
+						ResourceLocatorProviderFactory.create("SharedResources", 0),
+						ResourceLocatorProviderFactory.create("SecureResources", 3)
+						));
 		
 		assertNotNull(resourceCollections);
 		assertEquals(4, resourceCollections.size());
@@ -32,8 +34,10 @@ public class TestClasspathScanning {
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
 		
 		
-		resourceCollections = new AbstractResourceInfoCollectionResolver(){
-		}.resolve(Sets.newHashSet(ResourceLocatorProviderFactory.create("ComponentResources/ConfigurationCore/EnvironmentOverrides", 2)));
+		resourceCollections = new ResourceInfoCollectionResolver().resolve(
+				Sets.newHashSet(
+						ResourceLocatorProviderFactory.create("ComponentResources/ConfigurationCore/EnvironmentOverrides", 2)
+						));
 		
 		Logger.getAnonymousLogger().info(resourceCollections.toString());
 	}
