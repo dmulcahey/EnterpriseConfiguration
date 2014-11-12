@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class CombinedResolutionTestResult {
+public class CombinedResolutionTestResult extends AbstractPrintable {
 
 	private List<ResolutionTestResult> resolutionTestResults;
 

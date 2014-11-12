@@ -17,19 +17,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<!--  
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>apache-snapshots</id>
-			<name>Apache Snapshots</name>
-			<url>https://repository.apache.org/content/repositories/snapshots/</url>
-		</repository>
-	</repositories>
-	
-	-->
+	<!-- <repositories> <repository> <snapshots> <enabled>true</enabled> </snapshots> 
+		<id>apache-snapshots</id> <name>Apache Snapshots</name> <url>https://repository.apache.org/content/repositories/snapshots/</url> 
+		</repository> </repositories> -->
 
 	<dependencies>
 		<dependency>
@@ -43,13 +33,13 @@
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
-		<!-- 
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-configuration2</artifactId>
-			<version>2.0-alpha1-SNAPSHOT</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3</version>
 		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-configuration2</artifactId> 
+			<version>2.0-alpha1-SNAPSHOT</version> </dependency> -->
 	</dependencies>
 
 </project>
