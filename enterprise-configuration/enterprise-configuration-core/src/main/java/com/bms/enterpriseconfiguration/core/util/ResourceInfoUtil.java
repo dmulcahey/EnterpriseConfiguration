@@ -16,7 +16,10 @@ public class ResourceInfoUtil {
 			String[] segments = resource.getResourceName().split("/");
 			for(String segment : segments){
 				if(previousSegment.equalsIgnoreCase(parentDirectoryName)){
-					subdirectoryNames.add(segment);
+					//make sure it isn't a "file"
+					if(!segment.contains(".")){
+						subdirectoryNames.add(segment);
+					}
 					previousSegment = "";
 					break;
 				}

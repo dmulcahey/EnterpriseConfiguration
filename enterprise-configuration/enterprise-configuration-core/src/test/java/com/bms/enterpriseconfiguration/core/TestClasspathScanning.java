@@ -65,6 +65,8 @@ public class TestClasspathScanning {
 		Logger.getAnonymousLogger().info(resourceCollections.toString());
 		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSimpleName(resourceCollections.get("ComponentResources").getResources().iterator().next()));
+		
+		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
 	}
 	
 }
