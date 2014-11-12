@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollection;
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver;
+import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionMapResolver;
 import com.bms.enterpriseconfiguration.core.resource.ResourceLocatorProviderFactory;
 import com.bms.enterpriseconfiguration.core.resource.util.ResourceInfoUtil;
 import com.google.common.collect.Sets;
@@ -19,12 +19,12 @@ public class TestClasspathScanning {
 	
 	@Test
 	public void testComponentResources() throws IOException{
-		Map<String, ResourceInfoCollection> resourceCollections = new ResourceInfoCollectionResolver().resolve(
+		Map<String, ResourceInfoCollection> resourceCollections = new ResourceInfoCollectionMapResolver().resolve(
 				Sets.newHashSet(
-						ResourceLocatorProviderFactory.create("ComponentResources", 2),
-						ResourceLocatorProviderFactory.create("EnvironmentResources", 1),
+						ResourceLocatorProviderFactory.create("ComponentResources", 200),
+						ResourceLocatorProviderFactory.create("EnvironmentResources", 100),
 						ResourceLocatorProviderFactory.create("SharedResources", 0),
-						ResourceLocatorProviderFactory.create("SecureResources", 3)
+						ResourceLocatorProviderFactory.create("SecureResources", 300)
 						));
 		
 		assertNotNull(resourceCollections);
@@ -36,13 +36,17 @@ public class TestClasspathScanning {
 		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
 		
+		ResourceInfoCollection junitEnvironmentOverrides = resourceCollections.get("ComponentResources").filter(ResourceLocatorProviderFactory.createFrom("ConfigurationCore/EnvironmentOverrides/JUNIT", resourceCollections.get("ComponentResources").getResourceLocatorProvider()));
 		
-		resourceCollections = new ResourceInfoCollectionResolver().resolve(
+		Logger.getAnonymousLogger().info(junitEnvironmentOverrides.toString());
+		
+		resourceCollections = new ResourceInfoCollectionMapResolver().resolve(
 				Sets.newHashSet(
-						ResourceLocatorProviderFactory.create("ComponentResources/ConfigurationCore/EnvironmentOverrides", 2)
+						ResourceLocatorProviderFactory.create("ComponentResources/ConfigurationCore/EnvironmentOverrides", 250)
 						));
 		
 		Logger.getAnonymousLogger().info(resourceCollections.toString());
+		
 	}
 	
 }

@@ -1,43 +1,80 @@
 package com.bms.enterpriseconfiguration.core.resource;
 
-import java.io.IOException;
-import java.util.Map;
 import java.util.Set;
 
+import com.bms.enterpriseconfiguration.core.AbstractPrintable;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
+import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 
-public class ResourceInfoCollectionResolver extends AbstractResolver<Set<ResourceLocatorProvider>, Map<String, ResourceInfoCollection>> {
-	
-	protected final Map<String, ResourceInfoCollection> doResolution(Set<ResourceLocatorProvider> resourceLocatorProviders){
-		Set<ResourceInfo> resourceInformation;
-		try {
-			resourceInformation = ClassPath.from(Thread.currentThread().getContextClassLoader()).getResources();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		Map<String, ResourceInfoCollection> resourceInfoCollections = Maps.newHashMapWithExpectedSize(resourceLocatorProviders.size());
-		
-		for(final ResourceLocatorProvider resourceLocatorProvider : resourceLocatorProviders){
-			ResourceInfoCollection resourceInfoCollection = new ResourceInfoCollection();
-			resourceInfoCollection.setResourceLocatorProvider(resourceLocatorProvider);
-			resourceInfoCollection.getResources().addAll(Sets.filter(resourceInformation, new Predicate<ResourceInfo>(){
-				@Override
-				public boolean apply(ResourceInfo input) {
-					if(resourceLocatorProvider.getExcludesLocator().isPresent()){
-						return input.getResourceName().contains(resourceLocatorProvider.getResourceLocator()) && !input.getResourceName().contains(resourceLocatorProvider.getExcludesLocator().get());
-					}
-					return input.getResourceName().contains(resourceLocatorProvider.getResourceLocator());
+public class ResourceInfoCollectionResolver extends AbstractResolver<ResourceDefinition, ResourceInfoCollection>{
+
+	@Override
+	protected ResourceInfoCollection doResolution(final ResourceDefinition resourceDefinition) {
+		ResourceInfoCollection resourceInfoCollection = new ResourceInfoCollection();
+		resourceInfoCollection.setResourceLocatorProvider(resourceDefinition.getResourceLocatorProvider());
+		resourceInfoCollection.getResources().addAll(Sets.filter(resourceDefinition.getResources(), new Predicate<ResourceInfo>(){
+			@Override
+			public boolean apply(ResourceInfo input) {
+				if(resourceDefinition.getResourceLocatorProvider().getExcludesLocator().isPresent()){
+					return input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getResourceLocator()) && !input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getExcludesLocator().get());
 				}
-			}));
-			resourceInfoCollections.put(resourceLocatorProvider.getResourceLocator(), resourceInfoCollection);
-		}
-		
-		return resourceInfoCollections;
+				return input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getResourceLocator());
+			}
+		}));
+		return resourceInfoCollection;
 	}
 	
+	public static class ResourceDefinition extends AbstractPrintable {
+		
+		public ResourceDefinition(){
+		}
+		
+		public ResourceDefinition(ResourceLocatorProvider resourceLocatorProvider, ClassPath classPath, ResourceInfoCollection resourceInfoCollection) {
+			this.setResourceLocatorProvider(resourceLocatorProvider);
+			this.setClassPath(classPath);
+			this.setResourceInfoCollection(resourceInfoCollection);
+		}
+
+		private ResourceLocatorProvider resourceLocatorProvider;
+		private Optional<ClassPath> classPath;
+		private Optional<ResourceInfoCollection> resourceInfoCollection;
+		
+		public ResourceLocatorProvider getResourceLocatorProvider() {
+			return resourceLocatorProvider;
+		}
+		
+		public void setResourceLocatorProvider(ResourceLocatorProvider resourceLocatorProvider) {
+			this.resourceLocatorProvider = resourceLocatorProvider;
+		}
+		
+		public Optional<ClassPath> getClassPath() {
+			return classPath;
+		}
+		
+		public void setClassPath(ClassPath classPath) {
+			this.classPath = Optional.fromNullable(classPath);
+		}
+
+		public Optional<ResourceInfoCollection> getResourceInfoCollection() {
+			return resourceInfoCollection;
+		}
+
+		public void setResourceInfoCollection(ResourceInfoCollection resourceInfoCollection) {
+			this.resourceInfoCollection = Optional.fromNullable(resourceInfoCollection);
+		}
+		
+		public Set<ResourceInfo> getResources(){
+			if(this.getResourceInfoCollection().isPresent()){
+				return this.getResourceInfoCollection().get().getResources();
+			}
+			return this.getClassPath().get().getResources();
+		}
+		
+	}
+
 }

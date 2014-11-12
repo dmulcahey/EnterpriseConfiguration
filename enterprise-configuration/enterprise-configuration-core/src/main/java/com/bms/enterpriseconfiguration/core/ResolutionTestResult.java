@@ -15,7 +15,7 @@ public class ResolutionTestResult extends AbstractPrintable {
 	}
 	
 	public void setPossibleException(Throwable possibleException) {
-		this.possibleException = Optional.of(possibleException);
+		this.possibleException = Optional.fromNullable(possibleException);
 	}
 
 	public Optional<String> getInformationMessage() {
@@ -23,7 +23,7 @@ public class ResolutionTestResult extends AbstractPrintable {
 	}
 
 	public void setInformationMessage(String informationMessage) {
-		this.informationMessage = Optional.of(informationMessage);
+		this.informationMessage = Optional.fromNullable(informationMessage);
 	}
 
 	public Optional<String> getWarningMessage() {
@@ -31,7 +31,7 @@ public class ResolutionTestResult extends AbstractPrintable {
 	}
 
 	public void setWarningMessage(String warningMessage) {
-		this.warningMessage = Optional.of(warningMessage);
+		this.warningMessage = Optional.fromNullable(warningMessage);
 	}
 
 	public Optional<String> getErrorMessage() {
@@ -39,7 +39,7 @@ public class ResolutionTestResult extends AbstractPrintable {
 	}
 
 	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = Optional.of(errorMessage);
+		this.errorMessage = Optional.fromNullable(errorMessage);
 	}
 
 	public boolean isSuccessful() {
