@@ -27,7 +27,7 @@ public class ResourceInfoCollection extends AbstractPrintableResource {
 	}
 	
 	public ResourceInfoCollection filter(ResourceLocatorProvider aResourceLocatorProvider){
-		return new ResourceInfoCollectionResolver().doResolution(new ResourceDefinition(ResourceLocatorProviderFactory.createCombined(aResourceLocatorProvider.getResourceLocator(), resourceLocatorProvider), null, this));
+		return new ResourceInfoCollectionResolver().doResolution(new ResourceDefinition(aResourceLocatorProvider, null, this));
 	}
 	
 }

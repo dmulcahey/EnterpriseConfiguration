@@ -36,7 +36,7 @@ public class TestClasspathScanning {
 		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
 		
-		ResourceInfoCollection junitEnvironmentOverrides = resourceCollections.get("ComponentResources").filter(ResourceLocatorProviderFactory.createFrom("ConfigurationCore/EnvironmentOverrides/JUNIT", resourceCollections.get("ComponentResources").getResourceLocatorProvider()));
+		ResourceInfoCollection junitEnvironmentOverrides = resourceCollections.get("ComponentResources").filter(ResourceLocatorProviderFactory.createFrom(resourceCollections.get("ComponentResources").getResourceLocatorProvider(), "ConfigurationCore/EnvironmentOverrides/JUNIT"));
 		
 		Logger.getAnonymousLogger().info(junitEnvironmentOverrides.toString());
 		

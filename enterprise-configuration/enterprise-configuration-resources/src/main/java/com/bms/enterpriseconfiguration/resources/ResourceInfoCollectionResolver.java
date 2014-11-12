@@ -5,6 +5,7 @@ import java.util.Set;
 import com.bms.enterpriseconfiguration.core.AbstractPrintable;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
 import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.bms.enterpriseconfiguration.resources.filter.ResourceFilter;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
@@ -20,10 +21,11 @@ public class ResourceInfoCollectionResolver extends AbstractResolver<ResourceDef
 		resourceInfoCollection.getResources().addAll(Sets.filter(resourceDefinition.getResources(), new Predicate<ResourceInfo>(){
 			@Override
 			public boolean apply(ResourceInfo input) {
-				if(resourceDefinition.getResourceLocatorProvider().getExcludesLocator().isPresent()){
-					return input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getResourceLocator()) && !input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getExcludesLocator().get());
+				boolean accept = true;
+				for(ResourceFilter filter : resourceDefinition.getResourceLocatorProvider().getFilters()){
+					accept = accept && filter.accept(input.getResourceName());
 				}
-				return input.getResourceName().contains(resourceDefinition.getResourceLocatorProvider().getResourceLocator());
+				return accept;
 			}
 		}));
 		return resourceInfoCollection;

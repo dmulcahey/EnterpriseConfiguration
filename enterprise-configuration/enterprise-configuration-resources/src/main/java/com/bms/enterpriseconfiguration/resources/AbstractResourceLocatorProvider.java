@@ -1,22 +1,27 @@
 package com.bms.enterpriseconfiguration.resources;
 
-import com.google.common.base.Optional;
 
 public abstract class AbstractResourceLocatorProvider implements ResourceLocatorProvider {
+
+	private String name;
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	@Override
 	public boolean isRequired() {
 		return true;
 	}
-	
-	@Override
-	public Optional<String> getExcludesLocator() {
-		return Optional.absent();
-	}
 
 	@Override
 	public String toString() {
-		return "AbstractResourceLocatorProvider [isRequired(" + isRequired() + "), getResourceLocator(" + getResourceLocator() + "), getOrder(" + getOrder() + "), getExcludesLocator(" + getExcludesLocator() + ")]";
+		return "AbstractResourceLocatorProvider [name(" + name + "), isRequired(" + isRequired() + "), getFilters(" + getFilters() + "), getOrder(" + getOrder() + ")]";
 	}
 	
 }

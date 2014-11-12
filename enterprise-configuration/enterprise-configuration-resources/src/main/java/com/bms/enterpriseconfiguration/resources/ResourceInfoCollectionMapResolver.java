@@ -21,7 +21,7 @@ public class ResourceInfoCollectionMapResolver extends AbstractResolver<Set<Reso
 		Map<String, ResourceInfoCollection> resourceInfoCollections = Maps.newHashMapWithExpectedSize(resourceLocatorProviders.size());
 		
 		for(final ResourceLocatorProvider resourceLocatorProvider : resourceLocatorProviders){
-			resourceInfoCollections.put(resourceLocatorProvider.getResourceLocator(), new ResourceInfoCollectionResolver().doResolution(new ResourceDefinition(resourceLocatorProvider, classPath, null)));
+			resourceInfoCollections.put(resourceLocatorProvider.getName(), new ResourceInfoCollectionResolver().doResolution(new ResourceDefinition(resourceLocatorProvider, classPath, null)));
 		}
 		
 		return resourceInfoCollections;

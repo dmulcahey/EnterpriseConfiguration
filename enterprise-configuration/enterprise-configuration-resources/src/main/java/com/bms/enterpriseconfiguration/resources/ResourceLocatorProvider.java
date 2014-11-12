@@ -1,15 +1,17 @@
 package com.bms.enterpriseconfiguration.resources;
 
-import com.google.common.base.Optional;
+import java.util.Set;
+
+import com.bms.enterpriseconfiguration.resources.filter.ResourceFilter;
 
 public interface ResourceLocatorProvider {
 
-	String getResourceLocator();
+	String getName();
+	
+	Set<ResourceFilter> getFilters();
 	
 	boolean isRequired();
 	
 	int getOrder();
-	
-	Optional<String> getExcludesLocator();
 	
 }
