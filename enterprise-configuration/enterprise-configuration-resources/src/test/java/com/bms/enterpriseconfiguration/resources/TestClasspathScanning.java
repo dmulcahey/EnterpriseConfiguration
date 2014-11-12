@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import com.bms.enterpriseconfiguration.resources.ResourceInfoCollection;
-import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionMapResolver;
-import com.bms.enterpriseconfiguration.resources.ResourceLocatorProviderFactory;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.bms.enterpriseconfiguration.resources.filter.ExtensionFilter;
+import com.bms.enterpriseconfiguration.resources.filter.NotFilter;
 import com.bms.enterpriseconfiguration.resources.util.ResourceInfoUtil;
 import com.google.common.collect.Sets;
 
@@ -35,6 +35,16 @@ public class TestClasspathScanning {
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSimpleName(resourceCollections.get("ComponentResources").getResources().iterator().next()));
 		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
+		
+		
+		ResourceInfoCollectionResolver resourceInfoCollectionResolver = new ResourceInfoCollectionResolver();
+		ResourceInfoCollection componentResources = resourceCollections.get("ComponentResources");
+		
+		ResourceLocatorProvider resourceLocatorProvider = ResourceLocatorProviderFactory.create("ComponentResources", 200);
+		resourceLocatorProvider.getFilters().add(new NotFilter(new ExtensionFilter(".properties")));
+		
+		ResourceInfoCollection componentResourcesPropertyFiles = resourceInfoCollectionResolver.doResolution(new ResourceDefinition(resourceLocatorProvider, null, componentResources));
+		Logger.getAnonymousLogger().info(componentResourcesPropertyFiles.toString());
 		
 		ResourceInfoCollection junitEnvironmentOverrides = resourceCollections.get("ComponentResources").filter(ResourceLocatorProviderFactory.createFrom(resourceCollections.get("ComponentResources").getResourceLocatorProvider(), "ConfigurationCore/EnvironmentOverrides/JUNIT"));
 		

@@ -1,5 +1,6 @@
 package com.bms.enterpriseconfiguration.resources;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.bms.enterpriseconfiguration.resources.filter.PathFilter;
@@ -9,9 +10,13 @@ import com.google.common.collect.Sets;
 public class ResourceLocatorProviderFactory {
 
 	public static ResourceLocatorProvider create(final String name, final int order, final boolean required, String... pathFilters){
+		return ResourceLocatorProviderFactory.create(name, order, required, new PathFilter(pathFilters));
+	}
+	
+	public static ResourceLocatorProvider create(final String name, final int order, final boolean required, final ResourceFilter... resourceFilters){
 		
 		final Set<ResourceFilter> filters = Sets.newHashSet();
-		filters.add(new PathFilter(pathFilters));
+		Collections.addAll(filters, resourceFilters);
 		
 		AbstractResourceLocatorProvider provider = new AbstractResourceLocatorProvider() {
 			@Override
