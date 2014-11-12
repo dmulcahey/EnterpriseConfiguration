@@ -15,5 +15,12 @@ public class CombinedResolutionTestResult {
 		return resolutionTestResults;
 	}
 	
+	public boolean isSuccessful(){
+		boolean successful = true;
+		for(ResolutionTestResult resolutionTestResult : getResolutionTestResults()){
+			successful = successful && resolutionTestResult.isSuccessful();
+		}
+		return successful;
+	}
 	
 }
