@@ -1,9 +1,10 @@
-package com.bms.enterpriseconfiguration.core;
+package com.bms.enterpriseconfiguration.core.resource;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import com.bms.enterpriseconfiguration.core.AbstractResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

@@ -9,7 +9,10 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import com.bms.enterpriseconfiguration.core.util.ResourceInfoUtil;
+import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollection;
+import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver;
+import com.bms.enterpriseconfiguration.core.resource.ResourceLocatorProviderFactory;
+import com.bms.enterpriseconfiguration.core.resource.util.ResourceInfoUtil;
 import com.google.common.collect.Sets;
 
 public class TestClasspathScanning {
