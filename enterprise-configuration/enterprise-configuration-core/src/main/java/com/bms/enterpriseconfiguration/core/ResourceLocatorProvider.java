@@ -6,4 +6,6 @@ public interface ResourceLocatorProvider {
 	
 	boolean isRequired();
 	
+	int getOrder();
+	
 }

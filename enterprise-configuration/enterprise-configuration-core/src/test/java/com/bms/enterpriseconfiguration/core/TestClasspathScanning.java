@@ -1,58 +1,70 @@
 package com.bms.enterpriseconfiguration.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.junit.Test;
 
+import com.bms.enterpriseconfiguration.core.util.ResourceInfoUtil;
 import com.google.common.collect.Sets;
-import com.google.common.reflect.ClassPath;
 
 public class TestClasspathScanning {
 	
 	@Test
 	public void testComponentResources() throws IOException{
 		Map<String, ResourceInfoCollection> resourceCollections = new AbstractResourceInfoCollectionResolver(){
-			@Override
-			protected Set<ResourceLocatorProvider> getResourceLocatorProviders() {
-				Set<ResourceLocatorProvider> resourceLocatorProviders = Sets.newHashSet();
-				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+		}.resolve(Sets.newHashSet(new AbstractResourceLocatorProvider() {
 					@Override
 					public String getResourceLocator() {
 						return "ComponentResources";
 					}
-				});
-				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+
+					@Override
+					public int getOrder() {
+						return 2;
+					}
+				},new AbstractResourceLocatorProvider() {
 					@Override
 					public String getResourceLocator() {
 						return "EnvironmentResources";
 					}
-				});
-				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+
+					@Override
+					public int getOrder() {
+						return 1;
+					}
+				},new AbstractResourceLocatorProvider() {
 					@Override
 					public String getResourceLocator() {
 						return "SharedResources";
 					}
-				});
-				resourceLocatorProviders.add(new AbstractResourceLocatorProvider() {
+
+					@Override
+					public int getOrder() {
+						return 0;
+					}
+				},new AbstractResourceLocatorProvider() {
 					@Override
 					public String getResourceLocator() {
 						return "SecureResources";
 					}
-				});
-				return resourceLocatorProviders;
-			}
-		}.resolve(ClassPath.from(Thread.currentThread().getContextClassLoader()));
+
+					@Override
+					public int getOrder() {
+						return 3;
+					}
+				}));
 		
 		assertNotNull(resourceCollections);
 		assertEquals(4, resourceCollections.size());
 		
 		Logger.getAnonymousLogger().info(resourceCollections.toString());
 		
+		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSimpleName(resourceCollections.get("ComponentResources").getResources().iterator().next()));
 	}
 	
 }

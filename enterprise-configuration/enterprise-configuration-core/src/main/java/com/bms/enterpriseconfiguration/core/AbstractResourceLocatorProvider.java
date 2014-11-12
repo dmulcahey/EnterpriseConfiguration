@@ -9,7 +9,7 @@ public abstract class AbstractResourceLocatorProvider implements ResourceLocator
 
 	@Override
 	public String toString() {
-		return "AbstractResourceLocatorProvider [isRequired()=" + isRequired() + ", getResourceLocator=" + getResourceLocator() + "]";
+		return "AbstractResourceLocatorProvider [isRequired()=" + isRequired() + ", getResourceLocator=" + getResourceLocator() + ", getOrder=" + getOrder() + "]";
 	}
 	
 }

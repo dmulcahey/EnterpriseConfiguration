@@ -26,4 +26,8 @@ public class ResourceInfoUtil {
 		return subdirectoryNames;
 	}
 	
+	public static String getSimpleName(ResourceInfo resourceInfo){
+		return resourceInfo.getResourceName().substring(resourceInfo.getResourceName().lastIndexOf("/") + 1);
+	}
+	
 }

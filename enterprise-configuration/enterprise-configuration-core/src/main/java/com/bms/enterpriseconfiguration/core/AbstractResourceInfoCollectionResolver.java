@@ -1,5 +1,6 @@
 package com.bms.enterpriseconfiguration.core;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,15 +10,18 @@ import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 
-public abstract class AbstractResourceInfoCollectionResolver extends AbstractResolver<ClassPath, Map<String, ResourceInfoCollection>> {
-
-	protected abstract Set<ResourceLocatorProvider> getResourceLocatorProviders();
+public abstract class AbstractResourceInfoCollectionResolver extends AbstractResolver<Set<ResourceLocatorProvider>, Map<String, ResourceInfoCollection>> {
 	
-	protected final Map<String, ResourceInfoCollection> doResolution(ClassPath classPath){
-		Set<ResourceInfo> resourceInformation = classPath.getResources();
-		Map<String, ResourceInfoCollection> resourceInfoCollections = Maps.newHashMapWithExpectedSize(getResourceLocatorProviders().size());
+	protected final Map<String, ResourceInfoCollection> doResolution(Set<ResourceLocatorProvider> resourceLocatorProviders){
+		Set<ResourceInfo> resourceInformation;
+		try {
+			resourceInformation = ClassPath.from(Thread.currentThread().getContextClassLoader()).getResources();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		Map<String, ResourceInfoCollection> resourceInfoCollections = Maps.newHashMapWithExpectedSize(resourceLocatorProviders.size());
 		
-		for(ResourceLocatorProvider resourceLocatorProvider : getResourceLocatorProviders()){
+		for(final ResourceLocatorProvider resourceLocatorProvider : resourceLocatorProviders){
 			ResourceInfoCollection resourceInfoCollection = new ResourceInfoCollection();
 			resourceInfoCollection.setResourceLocatorProvider(resourceLocatorProvider);
 			resourceInfoCollection.getResources().addAll(Sets.filter(resourceInformation, new Predicate<ResourceInfo>(){
