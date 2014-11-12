@@ -23,12 +23,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.bms</groupId>
-			<artifactId>enterprise-configuration-test-resources</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>

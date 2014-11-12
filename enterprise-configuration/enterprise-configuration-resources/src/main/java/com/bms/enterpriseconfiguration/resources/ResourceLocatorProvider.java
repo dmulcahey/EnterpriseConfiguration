@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.core.resource;
+package com.bms.enterpriseconfiguration.resources;
 
 import com.google.common.base.Optional;
 

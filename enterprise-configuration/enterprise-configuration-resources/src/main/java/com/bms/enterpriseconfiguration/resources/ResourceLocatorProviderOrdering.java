@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.core.resource;
+package com.bms.enterpriseconfiguration.resources;
 
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;

@@ -1,8 +1,7 @@
-package com.bms.enterpriseconfiguration.core.util;
+package com.bms.enterpriseconfiguration.resources;
 
 import java.lang.reflect.Type;
 
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollection;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -12,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class PrintFormatter {
+public abstract class AbstractPrintableResource {
 
 	private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting()
 			.registerTypeHierarchyAdapter(ResourceInfoCollection.class, new JsonSerializer<ResourceInfoCollection>(){
@@ -37,14 +36,8 @@ public class PrintFormatter {
 			})
 			.create();
 	
-	private PrintFormatter(){};
-	
-	/**
-	 * @param object
-	 * @return
-	 */
-	public static String format(final Object object){
-		return GSON_INSTANCE.toJson(object);
+	@Override
+	public String toString() {
+		return GSON_INSTANCE.toJson(this);
 	}
-	
 }

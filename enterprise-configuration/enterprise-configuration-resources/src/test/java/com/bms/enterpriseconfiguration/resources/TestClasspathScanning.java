@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.core;
+package com.bms.enterpriseconfiguration.resources;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollection;
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionMapResolver;
-import com.bms.enterpriseconfiguration.core.resource.ResourceLocatorProviderFactory;
-import com.bms.enterpriseconfiguration.core.resource.util.ResourceInfoUtil;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollection;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionMapResolver;
+import com.bms.enterpriseconfiguration.resources.ResourceLocatorProviderFactory;
+import com.bms.enterpriseconfiguration.resources.util.ResourceInfoUtil;
 import com.google.common.collect.Sets;
 
 public class TestClasspathScanning {

@@ -1,11 +1,11 @@
-package com.bms.enterpriseconfiguration.core.resource;
+package com.bms.enterpriseconfiguration.resources;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.ClassPath;
 

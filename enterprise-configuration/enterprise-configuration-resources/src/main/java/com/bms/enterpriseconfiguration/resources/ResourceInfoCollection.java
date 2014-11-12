@@ -1,13 +1,12 @@
-package com.bms.enterpriseconfiguration.core.resource;
+package com.bms.enterpriseconfiguration.resources;
 
 import java.util.Set;
 
-import com.bms.enterpriseconfiguration.core.AbstractPrintable;
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 
-public class ResourceInfoCollection extends AbstractPrintable {
+public class ResourceInfoCollection extends AbstractPrintableResource {
 
 	private ResourceLocatorProvider resourceLocatorProvider;
 	private Set<ResourceInfo> resources;

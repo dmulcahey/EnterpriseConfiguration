@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.core.resource.util;
+package com.bms.enterpriseconfiguration.resources.util;
 
 import java.io.IOException;
 import java.util.Collection;

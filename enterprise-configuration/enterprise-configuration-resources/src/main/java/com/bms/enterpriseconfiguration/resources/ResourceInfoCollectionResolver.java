@@ -1,10 +1,10 @@
-package com.bms.enterpriseconfiguration.core.resource;
+package com.bms.enterpriseconfiguration.resources;
 
 import java.util.Set;
 
 import com.bms.enterpriseconfiguration.core.AbstractPrintable;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
-import com.bms.enterpriseconfiguration.core.resource.ResourceInfoCollectionResolver.ResourceDefinition;
+import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
