@@ -2,6 +2,7 @@ package com.bms.enterpriseconfiguration.resources;
 
 import java.lang.reflect.Type;
 
+import com.google.common.reflect.ClassPath.ResourceInfo;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -20,6 +21,15 @@ public abstract class AbstractPrintableResource {
 					JsonObject returnValue = new JsonObject();
 					returnValue.addProperty("resourceLocatorProvider", src.getResourceLocatorProvider().toString());
 					returnValue.add("resources", context.serialize(src.getResources()));
+					return returnValue;
+				}
+			})
+			.registerTypeAdapter(ResourceInfo.class, new JsonSerializer<ResourceInfo>(){
+				@Override
+				public JsonElement serialize(ResourceInfo src, Type typeOfSrc, JsonSerializationContext context) {
+					JsonObject returnValue = new JsonObject();
+					returnValue.addProperty("resourceName", src.getResourceName());
+					returnValue.add("url", context.serialize(src.url().toExternalForm()));
 					return returnValue;
 				}
 			})

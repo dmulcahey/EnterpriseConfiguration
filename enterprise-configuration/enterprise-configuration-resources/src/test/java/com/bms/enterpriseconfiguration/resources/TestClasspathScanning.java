@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.VFS;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.resources.ResourceInfoCollectionResolver.ResourceDefinition;
@@ -34,6 +37,8 @@ public class TestClasspathScanning {
 		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSimpleName(resourceCollections.get("ComponentResources").getResources().iterator().next()));
 		
+		Logger.getAnonymousLogger().info("Is diresctory: " + ResourceInfoUtil.isDirectory(resourceCollections.get("ComponentResources").getResources().iterator().next()));
+		
 		Logger.getAnonymousLogger().info(ResourceInfoUtil.getSubdirectoryNamesFromResourceInfo(resourceCollections.get("ComponentResources").getResources(), "ComponentResources").toString());
 		
 		
@@ -57,6 +62,17 @@ public class TestClasspathScanning {
 		
 		Logger.getAnonymousLogger().info(resourceCollections.toString());
 		
+	}
+	
+	@Test
+	public void testApacheCommonsVFS() throws FileSystemException{
+		String uri = "jar:file:/C:/Users/A13907/.m2/repository/com/bms/enterprise-configuration-test-resources/0.0.1-SNAPSHOT/enterprise-configuration-test-resources-0.0.1-SNAPSHOT.jar!/ComponentResources/";
+		FileObject fileObject = VFS.getManager().resolveFile(uri);
+		Logger.getAnonymousLogger().info(fileObject.getType().toString());
+		FileObject[] children = fileObject.getChildren();
+		for(FileObject child : children){
+			Logger.getAnonymousLogger().info(child.getName().getBaseName() + ", type: " + child.getType().toString());
+		}
 	}
 	
 }
