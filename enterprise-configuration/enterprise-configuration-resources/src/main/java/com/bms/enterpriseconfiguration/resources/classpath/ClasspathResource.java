@@ -11,12 +11,13 @@ import com.google.common.reflect.ClassPath.ResourceInfo;
 
 public class ClasspathResource extends AbstractPrintableResource {
 	
+	private ResourceInfo resourceInfo;
+	private boolean secure = false;
+	
 	public ClasspathResource(ResourceInfo resourceInfo) {
 		this.resourceInfo = resourceInfo;
 	}
-
-	private ResourceInfo resourceInfo;
-
+	
 	public ResourceInfo getResourceInfo() {
 		return resourceInfo;
 	}
@@ -43,6 +44,14 @@ public class ClasspathResource extends AbstractPrintableResource {
 	
 	public boolean isFile() throws FileSystemException{
 		return VFS.getManager().resolveFile(resourceInfo.url().toExternalForm()).getType().equals(FileType.FILE);
+	}
+
+	public boolean isSecure() {
+		return secure;
+	}
+
+	public void setSecure(boolean secure) {
+		this.secure = secure;
 	}
 	
 }
