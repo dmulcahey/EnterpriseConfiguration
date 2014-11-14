@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.resources.filter;
+package com.bms.enterpriseconfiguration.resources.classpath.filter;
 
 public class DirectoryFilter implements ResourceFilter {
 

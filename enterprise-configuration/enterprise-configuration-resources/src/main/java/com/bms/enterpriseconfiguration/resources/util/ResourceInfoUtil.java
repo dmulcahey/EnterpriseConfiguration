@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.VFS;
 
@@ -36,14 +35,6 @@ public class ResourceInfoUtil {
 		}
 		
 		return subdirectoryNames;
-	}
-	
-	public static String getSimpleName(ResourceInfo resourceInfo){
-		return resourceInfo.getResourceName().substring(resourceInfo.getResourceName().lastIndexOf("/") + 1);
-	}
-	
-	public static boolean isDirectory(ResourceInfo resourceInfo) throws FileSystemException{
-		return VFS.getManager().resolveFile(resourceInfo.url().toExternalForm()).getType().equals(FileType.FOLDER);
 	}
 	
 }

@@ -15,15 +15,6 @@ import com.google.gson.JsonSerializer;
 public abstract class AbstractPrintableResource {
 
 	private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting()
-			.registerTypeHierarchyAdapter(ResourceInfoCollection.class, new JsonSerializer<ResourceInfoCollection>(){
-				@Override
-				public JsonElement serialize(ResourceInfoCollection src, Type typeOfSrc, JsonSerializationContext context) {
-					JsonObject returnValue = new JsonObject();
-					returnValue.addProperty("resourceLocatorProvider", src.getResourceLocatorProvider().toString());
-					returnValue.add("resources", context.serialize(src.getResources()));
-					return returnValue;
-				}
-			})
 			.registerTypeAdapter(ResourceInfo.class, new JsonSerializer<ResourceInfo>(){
 				@Override
 				public JsonElement serialize(ResourceInfo src, Type typeOfSrc, JsonSerializationContext context) {
