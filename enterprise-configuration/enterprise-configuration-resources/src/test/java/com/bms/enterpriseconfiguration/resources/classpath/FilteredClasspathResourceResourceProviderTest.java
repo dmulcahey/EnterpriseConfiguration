@@ -14,7 +14,6 @@ public class FilteredClasspathResourceResourceProviderTest {
 	@Test
 	public void testFilteredClasspathResourceResourceProvider(){
 		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = new FilteredClasspathResourceResourceProvider();
-		classpathResourceResourceProvider.setClasspathResourceSource(new ClasspathResourceResourceProvider());
 		classpathResourceResourceProvider.setOrder(100);
 		classpathResourceResourceProvider.add(new PathFilter("ComponentResources"));
 		

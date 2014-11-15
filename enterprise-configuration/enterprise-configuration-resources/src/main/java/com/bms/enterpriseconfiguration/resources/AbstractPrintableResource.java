@@ -24,6 +24,14 @@ public abstract class AbstractPrintableResource {
 					return returnValue;
 				}
 			})
+			.registerTypeHierarchyAdapter(ResourceProvider.class, new JsonSerializer<ResourceProvider<?>>(){
+				@Override
+				public JsonElement serialize(ResourceProvider<?> src, Type typeOfSrc, JsonSerializationContext context) {
+					JsonObject returnValue = new JsonObject();
+					returnValue.addProperty("order", src.getOrder());
+					return returnValue;
+				}
+			})
 			.addSerializationExclusionStrategy(new ExclusionStrategy(){
 				@Override
 				public boolean shouldSkipField(FieldAttributes f) {
