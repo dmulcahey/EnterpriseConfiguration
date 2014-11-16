@@ -23,6 +23,10 @@ public class CombinedConfigurationDescriptorResolverTest {
 		componentResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
 		componentResourcesProvider.add(new ExtensionFilter(".properties"));
 		
+		FilteredClasspathResourceResourceProvider environmentOverridesResourcesProvider = new FilteredClasspathResourceResourceProvider(400);
+		environmentOverridesResourcesProvider.add(new PathFilter("ComponentResources/Configuration/EnvironmentOverrides/JUNIT"));
+		environmentOverridesResourcesProvider.add(new ExtensionFilter(".properties"));
+		
 		FilteredClasspathResourceResourceProvider environmentResourcesProvider = new FilteredClasspathResourceResourceProvider(200);
 		environmentResourcesProvider.add(new PathFilter("EnvironmentResources/JUNIT"));
 		environmentResourcesProvider.add(new ExtensionFilter(".properties"));
@@ -31,7 +35,7 @@ public class CombinedConfigurationDescriptorResolverTest {
 		sharedResourcesProvider.add(new PathFilter("SharedResources"));
 		sharedResourcesProvider.add(new ExtensionFilter(".properties"));
 		
-		FilteredClasspathResourceResourceProvider secureResourcesProvider = new FilteredClasspathResourceResourceProvider(400, true);
+		FilteredClasspathResourceResourceProvider secureResourcesProvider = new FilteredClasspathResourceResourceProvider(500, true);
 		secureResourcesProvider.add(new PathFilter("SecureResources/JUNIT/Configuration"));
 		secureResourcesProvider.add(new ExtensionFilter(".properties"));
 		
@@ -40,6 +44,7 @@ public class CombinedConfigurationDescriptorResolverTest {
 		resourceProviders.add(secureResourcesProvider);
 		resourceProviders.add(sharedResourcesProvider);
 		resourceProviders.add(environmentResourcesProvider);
+		resourceProviders.add(environmentOverridesResourcesProvider);
 		
 		CombinedConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new CombinedConfigurationDescriptorResolver<ClasspathResource>();
 		
@@ -47,7 +52,9 @@ public class CombinedConfigurationDescriptorResolverTest {
 		
 		assertNotNull(configurationDescriptors);
 		
-		Logger.getAnonymousLogger().info(configurationDescriptors.toString());
+		for(CombinedConfigurationDescriptor<ClasspathResource> configurationDescriptor : configurationDescriptors){
+			Logger.getAnonymousLogger().info("\n\n" + configurationDescriptor + "\n\n");
+		}
 		
 	}
 	
