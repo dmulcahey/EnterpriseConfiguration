@@ -5,17 +5,17 @@ import java.util.Set;
 import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.google.common.collect.Sets;
 
-public class CombinedConfigurationDescriptor<T extends AbstractResource> {
+public class ConfigurationDescriptor<T extends AbstractResource> {
 	
 	private String name;
 	private Set<T> resources;
 	
-	public CombinedConfigurationDescriptor(String name) {
+	public ConfigurationDescriptor(String name) {
 		super();
 		this.name = name;
 	}
 	
-	public CombinedConfigurationDescriptor() {
+	public ConfigurationDescriptor() {
 		super();
 	}
 	

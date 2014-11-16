@@ -46,13 +46,13 @@ public class CombinedConfigurationDescriptorResolverTest {
 		resourceProviders.add(environmentResourcesProvider);
 		resourceProviders.add(environmentOverridesResourcesProvider);
 		
-		CombinedConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new CombinedConfigurationDescriptorResolver<ClasspathResource>();
+		ConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new ConfigurationDescriptorResolver<ClasspathResource>();
 		
-		Set<CombinedConfigurationDescriptor<ClasspathResource>> configurationDescriptors =  combinedConfigurationDescriptorResolver.doResolution(resourceProviders);
+		Set<ConfigurationDescriptor<ClasspathResource>> configurationDescriptors =  combinedConfigurationDescriptorResolver.doResolution(resourceProviders);
 		
 		assertNotNull(configurationDescriptors);
 		
-		for(CombinedConfigurationDescriptor<ClasspathResource> configurationDescriptor : configurationDescriptors){
+		for(ConfigurationDescriptor<ClasspathResource> configurationDescriptor : configurationDescriptors){
 			Logger.getAnonymousLogger().info("\n\n" + configurationDescriptor + "\n\n");
 		}
 		

@@ -10,15 +10,15 @@ import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class CombinedConfigurationDescriptorResolver<T extends AbstractResource> extends AbstractResolver<Set<? extends ResourceProvider<Set<T>>>, Set<CombinedConfigurationDescriptor<T>>> {
+public class ConfigurationDescriptorResolver<T extends AbstractResource> extends AbstractResolver<Set<? extends ResourceProvider<Set<T>>>, Set<ConfigurationDescriptor<T>>> {
 
 	@Override
-	protected Set<CombinedConfigurationDescriptor<T>> doResolution(Set<? extends ResourceProvider<Set<T>>> input) {
-		Set<CombinedConfigurationDescriptor<T>> combinedConfigurationDescriptors = Sets.newHashSet();
+	protected Set<ConfigurationDescriptor<T>> doResolution(Set<? extends ResourceProvider<Set<T>>> input) {
+		Set<ConfigurationDescriptor<T>> combinedConfigurationDescriptors = Sets.newHashSet();
 		Map<String, Set<T>> allResourcesByName = arrangeResourcesByName(input);
 		
 		for(Entry<String, Set<T>> resourceSetEntry : allResourcesByName.entrySet()){
-			CombinedConfigurationDescriptor<T> combinedConfigurationDescriptor = new CombinedConfigurationDescriptor<T>(resourceSetEntry.getKey());
+			ConfigurationDescriptor<T> combinedConfigurationDescriptor = new ConfigurationDescriptor<T>(resourceSetEntry.getKey());
 			combinedConfigurationDescriptor.getResources().addAll(resourceSetEntry.getValue());
 			combinedConfigurationDescriptors.add(combinedConfigurationDescriptor);
 		}
