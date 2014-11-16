@@ -12,8 +12,10 @@ import com.google.common.reflect.ClassPath.ResourceInfo;
 public class FilteredClasspathResourceResourceProvider implements ResourceProvider<Set<ClasspathResource>> {
 
 	private static final ClassPath CLASSPATH;
+	
 	private Set<ResourceFilter> resourceFilters;
 	private int order = 0;
+	private boolean secure;
 	
 	static{
 		try{
@@ -31,6 +33,13 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 		this.order = order;
 	}
 	
+	public FilteredClasspathResourceResourceProvider(int order, boolean secure) {
+		super();
+		this.order = order;
+		this.secure = secure;
+	}
+
+	@Override
 	public int getOrder() {
 		return order;
 	}
@@ -48,6 +57,15 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 	
 	public boolean add(ResourceFilter resourceFilter) {
 		return getResourceFilters().add(resourceFilter);
+	}
+	
+	@Override
+	public boolean isSecure() {
+		return secure;
+	}
+
+	public void setSecure(boolean secure) {
+		this.secure = secure;
 	}
 
 	@Override

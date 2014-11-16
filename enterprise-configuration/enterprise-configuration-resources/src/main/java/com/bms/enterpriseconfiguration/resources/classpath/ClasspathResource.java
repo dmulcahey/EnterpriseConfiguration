@@ -6,38 +6,17 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.VFS;
 
-import com.bms.enterpriseconfiguration.resources.AbstractPrintableResource;
+import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 
-public class ClasspathResource extends AbstractPrintableResource {
+public class ClasspathResource extends AbstractResource {
 	
 	private ResourceInfo resourceInfo;
-	private ResourceProvider<?> resourceProvider;
-	private boolean secure = false;
 	
-	public ClasspathResource(ResourceInfo resourceInfo) {
-		super();
-		this.resourceInfo = resourceInfo;
-	}
-	
-	public ClasspathResource(ResourceInfo resourceInfo, boolean isSecure) {
-		super();
-		this.resourceInfo = resourceInfo;
-		this.secure = isSecure;
-	}
-	
-	public ClasspathResource(ResourceInfo resourceInfo, boolean secure, ResourceProvider<?> resourceProvider) {
-		super();
-		this.resourceInfo = resourceInfo;
-		this.resourceProvider = resourceProvider;
-		this.secure = secure;
-	}
-
 	public ClasspathResource(ResourceInfo resourceInfo, ResourceProvider<?> resourceProvider) {
-		super();
+		super(resourceProvider);
 		this.resourceInfo = resourceInfo;
-		this.resourceProvider = resourceProvider;
 	}
 
 	public ResourceInfo getResourceInfo() {
@@ -56,7 +35,8 @@ public class ClasspathResource extends AbstractPrintableResource {
 		this.resourceInfo = resourceInfo;
 	}
 	
-	public String getSimpleName(){
+	@Override
+	public String getName(){
 		return resourceInfo.getResourceName().substring(resourceInfo.getResourceName().lastIndexOf("/") + 1);
 	}
 	
@@ -66,22 +46,6 @@ public class ClasspathResource extends AbstractPrintableResource {
 	
 	public boolean isFile() throws FileSystemException{
 		return VFS.getManager().resolveFile(resourceInfo.url().toExternalForm()).getType().equals(FileType.FILE);
-	}
-
-	public boolean isSecure() {
-		return secure;
-	}
-
-	public void setSecure(boolean secure) {
-		this.secure = secure;
-	}
-
-	public ResourceProvider<?> getResourceProvider() {
-		return resourceProvider;
-	}
-
-	public void setResourceProvider(ResourceProvider<?> resourceProvider) {
-		this.resourceProvider = resourceProvider;
 	}
 	
 }

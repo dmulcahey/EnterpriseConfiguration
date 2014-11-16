@@ -10,6 +10,7 @@ import com.google.common.reflect.ClassPath.ResourceInfo;
 public class ClasspathResourceResourceProvider implements ResourceProvider<Set<ClasspathResource>> {
 
 	private static final ClassPath CLASSPATH;
+	private boolean secure;
 	
 	static{
 		try{
@@ -23,7 +24,7 @@ public class ClasspathResourceResourceProvider implements ResourceProvider<Set<C
 	public Set<ClasspathResource> getResources() {
 		Set<ClasspathResource> resources = Sets.newHashSet();
 		for(ResourceInfo resourceInfo : CLASSPATH.getResources()){
-			resources.add(new ClasspathResource(resourceInfo));
+			resources.add(new ClasspathResource(resourceInfo, this));
 		}
 		return resources;
 	}
@@ -33,4 +34,13 @@ public class ClasspathResourceResourceProvider implements ResourceProvider<Set<C
 		return 0;
 	}
 
+	@Override
+	public boolean isSecure() {
+		return secure;
+	}
+
+	public void setSecure(boolean secure) {
+		this.secure = secure;
+	}
+	
 }

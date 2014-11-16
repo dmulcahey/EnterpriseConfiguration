@@ -2,13 +2,13 @@ package com.bms.enterpriseconfiguration.configuration;
 
 import java.util.Set;
 
-import com.bms.enterpriseconfiguration.resources.ResourceProvider;
+import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.google.common.collect.Sets;
 
-public class CombinedConfigurationDescriptor {
+public class CombinedConfigurationDescriptor<T extends AbstractResource> {
 	
 	private String name;
-	private Set<ResourceProvider<?>> resourceProviders;
+	private Set<T> resources;
 	
 	public CombinedConfigurationDescriptor(String name) {
 		super();
@@ -26,18 +26,18 @@ public class CombinedConfigurationDescriptor {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Set<ResourceProvider<?>> getResourceProviders() {
-		if(resourceProviders == null){
-			resourceProviders = Sets.newHashSet();
+
+	public Set<T> getResources() {
+		if(resources == null){
+			resources = Sets.newHashSet();
 		}
-		return resourceProviders;
+		return resources;
 	}
 
 	@Override
 	public String toString() {
-		return "CombinedConfigurationDescriptor [name=" + name
-				+ ", resourceProviders=" + resourceProviders + "]";
+		return "CombinedConfigurationDescriptor [name=" + name + ", resources="
+				+ resources + "]";
 	}
 	
 }

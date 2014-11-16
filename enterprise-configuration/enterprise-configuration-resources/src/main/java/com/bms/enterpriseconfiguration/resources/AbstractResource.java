@@ -12,8 +12,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public abstract class AbstractPrintableResource {
-
+public abstract class AbstractResource {
+	
 	private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting()
 			.registerTypeAdapter(ResourceInfo.class, new JsonSerializer<ResourceInfo>(){
 				@Override
@@ -29,6 +29,7 @@ public abstract class AbstractPrintableResource {
 				public JsonElement serialize(ResourceProvider<?> src, Type typeOfSrc, JsonSerializationContext context) {
 					JsonObject returnValue = new JsonObject();
 					returnValue.addProperty("order", src.getOrder());
+					returnValue.addProperty("secure", src.isSecure());
 					return returnValue;
 				}
 			})
@@ -45,8 +46,30 @@ public abstract class AbstractPrintableResource {
 			})
 			.create();
 	
+	private ResourceProvider<?> resourceProvider;
+	
+	public AbstractResource(ResourceProvider<?> resourceProvider) {
+		super();
+		this.resourceProvider = resourceProvider;
+	}
+
+	public abstract String getName();
+	
+	public ResourceProvider<?> getResourceProvider() {
+		return resourceProvider;
+	}
+
+	public void setResourceProvider(ResourceProvider<?> resourceProvider) {
+		this.resourceProvider = resourceProvider;
+	}
+	
+	public boolean isSecure() {
+		return resourceProvider.isSecure();
+	}
+	
 	@Override
 	public String toString() {
 		return GSON_INSTANCE.toJson(this);
 	}
+	
 }
