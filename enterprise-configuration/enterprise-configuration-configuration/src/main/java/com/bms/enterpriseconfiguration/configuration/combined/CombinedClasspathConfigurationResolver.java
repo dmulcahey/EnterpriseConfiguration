@@ -38,6 +38,7 @@ public class CombinedClasspathConfigurationResolver extends AbstractConfiguratio
 	
 	private CombinedClasspathConfiguration<ClasspathResource> resolveCombinedClasspathConfiguration(ConfigurationDescriptor<ClasspathResource> configurationDescriptor) throws ConfigurationException{
 		CombinedClasspathConfiguration<ClasspathResource> combinedClasspathConfiguration = new CombinedClasspathConfiguration<ClasspathResource>();
+		combinedClasspathConfiguration.setCombinedConfigurationDescriptor(configurationDescriptor);
 		List<ClasspathResource> classpathResources = Lists.newArrayList(configurationDescriptor.getResources());
 		Collections.sort(classpathResources, Collections.reverseOrder(new ResourceOrdering()));
 		for(ClasspathResource classpathResource : classpathResources){

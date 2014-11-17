@@ -54,7 +54,7 @@ public class CombinedClasspathConfigurationResolverTest {
 		Set<CombinedClasspathConfiguration<ClasspathResource>> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.doResolution(resourceProviders);
 		
 		for(CombinedClasspathConfiguration<ClasspathResource> combinedClasspathConfiguration : combinedClasspathConfigurations){
-			Logger.getAnonymousLogger().info(ConfigurationConverter.getProperties(combinedClasspathConfiguration).toString());
+			Logger.getAnonymousLogger().info(combinedClasspathConfiguration.toString());
 		}
 		
 		

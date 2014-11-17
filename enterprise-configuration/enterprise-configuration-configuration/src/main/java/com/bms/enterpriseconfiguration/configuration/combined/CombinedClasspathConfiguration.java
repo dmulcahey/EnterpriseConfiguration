@@ -2,6 +2,7 @@ package com.bms.enterpriseconfiguration.configuration.combined;
 
 import java.util.Properties;
 
+import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
 
@@ -17,8 +18,8 @@ public class CombinedClasspathConfiguration<R extends AbstractResource> extends 
 		this(new OverrideCombiner());
 	}
 
-	public CombinedClasspathConfiguration(NodeCombiner comb) {
-		super(comb);
+	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
+		super(nodeCombiner);
 		this.getInterpolator().setEnableSubstitutionInVariables(true);
 	}
 
@@ -33,14 +34,23 @@ public class CombinedClasspathConfiguration<R extends AbstractResource> extends 
 
 	@Override
 	public Properties getAsProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return ConfigurationConverter.getProperties(this);
 	}
 
 	@Override
 	public Properties getAsPrintableProperties() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n");
+		sb.append(combinedConfigurationDescriptor.toString());
+		sb.append("\n\nProperties:\n");
+		sb.append(getAsProperties().toString());
+		sb.append("\n\n");
+		return sb.toString();
 	}
 	
 }
