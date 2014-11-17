@@ -19,6 +19,7 @@ public class CombinedClasspathConfiguration<R extends AbstractResource> extends 
 
 	public CombinedClasspathConfiguration(NodeCombiner comb) {
 		super(comb);
+		this.getInterpolator().setEnableSubstitutionInVariables(true);
 	}
 
 	@Override
