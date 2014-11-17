@@ -1,27 +1,24 @@
-package com.bms.enterpriseconfiguration.configuration;
+package com.bms.enterpriseconfiguration.configuration.combined;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.configuration2.ConfigurationConverter;
 import org.junit.Test;
 
+import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.FilteredClasspathResourceResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ExtensionFilter;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.NotFilter;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.PathFilter;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class CombinedConfigurationDescriptorResolverTest {
+public class CombinedClasspathConfigurationResolverTest {
 
+	
 	@Test
-	public void testCombinedConfigurationDescriptorResolver(){
+	public void testCombinedClasspathConfigurationResolver(){
 		FilteredClasspathResourceResourceProvider componentResourcesProvider = new FilteredClasspathResourceResourceProvider(300);
 		componentResourcesProvider.add(new PathFilter("ComponentResources/Configuration"));
 		componentResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
@@ -52,27 +49,16 @@ public class CombinedConfigurationDescriptorResolverTest {
 		
 		ConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new ConfigurationDescriptorResolver<ClasspathResource>();
 		
-		Set<ConfigurationDescriptor<ClasspathResource>> configurationDescriptors =  combinedConfigurationDescriptorResolver.resolve(resourceProviders);
+		CombinedClasspathConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathConfigurationResolver(combinedConfigurationDescriptorResolver);
 		
-		assertNotNull(configurationDescriptors);
+		Set<CombinedClasspathConfiguration<ClasspathResource>> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.doResolution(resourceProviders);
 		
-		for(ConfigurationDescriptor<ClasspathResource> configurationDescriptor : configurationDescriptors){
-			Logger.getAnonymousLogger().info("\n\n" + configurationDescriptor + "\n\n");
+		for(CombinedClasspathConfiguration<ClasspathResource> combinedClasspathConfiguration : combinedClasspathConfigurations){
+			Logger.getAnonymousLogger().info(ConfigurationConverter.getProperties(combinedClasspathConfiguration).toString());
 		}
 		
-	}
-	
-	@Test
-	public void testStringSubstitutor(){
-		Map<String,String> variables = Maps.newHashMap();
-		variables.put("componentName", "Configuration");
-		variables.put("environment", "JUNIT");
-		String template = "ComponentResources/${componentName}/EnvironmentOverrides/${environment}";
-		String afterSubstitution = StrSubstitutor.replace(template, variables);
 		
-		assertEquals("ComponentResources/Configuration/EnvironmentOverrides/JUNIT", afterSubstitution);
 		
-		Logger.getAnonymousLogger().info(template + " -> " + afterSubstitution);
 		
 	}
 	
