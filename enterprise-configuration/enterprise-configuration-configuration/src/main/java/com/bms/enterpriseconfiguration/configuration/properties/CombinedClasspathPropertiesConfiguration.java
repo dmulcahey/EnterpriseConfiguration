@@ -1,6 +1,7 @@
 package com.bms.enterpriseconfiguration.configuration.properties;
 
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -8,13 +9,16 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
 
+import com.bms.enterpriseconfiguration.configuration.Configuration;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.properties.util.PropertiesConfigurationUtil;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
+import com.google.common.collect.Sets;
 
 public class CombinedClasspathPropertiesConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements ClasspathPropertiesConfiguration {
 	
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
+	private Set<String> importedConfigurations = Sets.newHashSet();
 	
 	public CombinedClasspathPropertiesConfiguration() {
 		this(new OverrideCombiner());
@@ -59,15 +63,27 @@ public class CombinedClasspathPropertiesConfiguration extends org.apache.commons
 		return ConfigurationConverter.getProperties(clone);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public final String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n");
 		sb.append(combinedConfigurationDescriptor.toString());
+		if(!importedConfigurations.isEmpty()){
+		sb.append("\n\nImported Configurations:\n");
+			for(String importedConfiguration : importedConfigurations){
+				sb.append(((Configuration<ClasspathResource>)this.getConfiguration(importedConfiguration)).getConfigurationDescriptor().toString());
+			}
+		}
 		sb.append("\n\nProperties:\n");
 		sb.append(getAsPrintableProperties().toString());
 		sb.append("\n\n");
 		return sb.toString();
+	}
+	
+	void importConfiguration(CombinedClasspathPropertiesConfiguration configuration){
+		importedConfigurations.add(configuration.getConfigurationDescriptor().getName());
+		this.addConfiguration(configuration, configuration.getConfigurationDescriptor().getName());
 	}
 	
 }

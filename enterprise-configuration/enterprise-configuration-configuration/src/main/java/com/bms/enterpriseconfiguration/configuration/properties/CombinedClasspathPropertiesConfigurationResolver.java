@@ -16,6 +16,7 @@ public class CombinedClasspathPropertiesConfigurationResolver extends AbstractCl
 
 	public CombinedClasspathPropertiesConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);
+		this.getPostresolutionResolutionActivities().add(new CombinedClasspathPropertiesConfigurationImportHandler());
 	}
 
 	@Override
@@ -28,6 +29,6 @@ public class CombinedClasspathPropertiesConfigurationResolver extends AbstractCl
 			combinedClasspathConfiguration.addConfiguration(PropertiesConfigurationUtil.buildPropertiesConfiguration(classpathResource));
 		}
 		return combinedClasspathConfiguration;
-	}	
+	}
 
 }
