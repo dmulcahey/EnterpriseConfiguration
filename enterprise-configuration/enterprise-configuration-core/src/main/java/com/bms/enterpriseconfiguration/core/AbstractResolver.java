@@ -1,7 +1,8 @@
 package com.bms.enterpriseconfiguration.core;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 
 /*
  * Flow: 
@@ -14,6 +15,11 @@ import java.util.List;
  * 
  */
 public abstract class AbstractResolver<INPUT,OUTPUT> implements Resolver<INPUT,OUTPUT> {
+	
+	private Set<ResolutionActivity<INPUT>> preresolutionResolutionActivities;
+	private Set<ResolutionActivity<OUTPUT>> postresolutionResolutionActivities;
+	private Set<ResolutionTest<INPUT>> preresolutionResolutionTests;
+	private Set<ResolutionTest<OUTPUT>> postresolutionResolutionTests;
 
 	protected abstract OUTPUT doResolution(INPUT input);
 	
@@ -43,20 +49,32 @@ public abstract class AbstractResolver<INPUT,OUTPUT> implements Resolver<INPUT,O
 		return output;
 	}
 	
-	protected List<ResolutionActivity<INPUT>> getPreresolutionResolutionActivities(){
-		return Collections.emptyList();
+	protected final Set<ResolutionActivity<INPUT>> getPreresolutionResolutionActivities(){
+		if(preresolutionResolutionActivities == null){
+			preresolutionResolutionActivities = Sets.newHashSet();
+		}
+		return preresolutionResolutionActivities;
 	}
 	
-	protected List<ResolutionActivity<OUTPUT>> getPostresolutionResolutionActivities(){
-		return Collections.emptyList();
+	protected final Set<ResolutionActivity<OUTPUT>> getPostresolutionResolutionActivities(){
+		if(postresolutionResolutionActivities == null){
+			postresolutionResolutionActivities = Sets.newHashSet();
+		}
+		return postresolutionResolutionActivities;
 	}
 	
-	protected List<ResolutionTest<INPUT>> getPreresolutionResolutionTests(){
-		return Collections.emptyList();
+	protected final Set<ResolutionTest<INPUT>> getPreresolutionResolutionTests(){
+		if(preresolutionResolutionTests == null){
+			preresolutionResolutionTests = Sets.newHashSet();
+		}
+		return preresolutionResolutionTests;
 	}
 	
-	protected List<ResolutionTest<OUTPUT>> getPostresolutionResolutionTests(){
-		return Collections.emptyList();
+	protected final Set<ResolutionTest<OUTPUT>> getPostresolutionResolutionTests(){
+		if(postresolutionResolutionTests == null){
+			postresolutionResolutionTests = Sets.newHashSet();
+		}
+		return postresolutionResolutionTests;
 	}
-
+	
 }

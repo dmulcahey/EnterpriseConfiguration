@@ -28,6 +28,6 @@ public class CombinedClasspathPropertiesConfigurationResolver extends AbstractCl
 			combinedClasspathConfiguration.addConfiguration(PropertiesConfigurationUtil.buildPropertiesConfiguration(classpathResource));
 		}
 		return combinedClasspathConfiguration;
-	}
+	}	
 
 }
