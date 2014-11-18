@@ -16,15 +16,15 @@ import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class CombinedClasspathConfigurationResolver extends AbstractConfigurationResolver<ClasspathResource>{
+public class CombinedClasspathPropertiesConfigurationResolver extends AbstractConfigurationResolver<ClasspathResource>{
 
-	public CombinedClasspathConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
+	public CombinedClasspathPropertiesConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);
 	}
 
 	@Override
-	protected Set<CombinedClasspathConfiguration<ClasspathResource>> doResolution(Set<? extends ResourceProvider<Set<ClasspathResource>>> input) {
-		Set<CombinedClasspathConfiguration<ClasspathResource>> combinedClasspathConfigurations = Sets.newHashSet();
+	protected Set<CombinedClasspathPropertiesConfiguration> doResolution(Set<? extends ResourceProvider<Set<ClasspathResource>>> input) {
+		Set<CombinedClasspathPropertiesConfiguration> combinedClasspathConfigurations = Sets.newHashSet();
 		Set<ConfigurationDescriptor<ClasspathResource>> configurationDescriptors = this.getConfigurationDescriptorResolver().resolve(input);
 		for(ConfigurationDescriptor<ClasspathResource> configurationDescriptor : configurationDescriptors){
 			try {
@@ -36,8 +36,8 @@ public class CombinedClasspathConfigurationResolver extends AbstractConfiguratio
 		return combinedClasspathConfigurations;
 	}
 	
-	private CombinedClasspathConfiguration<ClasspathResource> resolveCombinedClasspathConfiguration(ConfigurationDescriptor<ClasspathResource> configurationDescriptor) throws ConfigurationException{
-		CombinedClasspathConfiguration<ClasspathResource> combinedClasspathConfiguration = new CombinedClasspathConfiguration<ClasspathResource>();
+	private CombinedClasspathPropertiesConfiguration resolveCombinedClasspathConfiguration(ConfigurationDescriptor<ClasspathResource> configurationDescriptor) throws ConfigurationException{
+		CombinedClasspathPropertiesConfiguration combinedClasspathConfiguration = new CombinedClasspathPropertiesConfiguration();
 		combinedClasspathConfiguration.setCombinedConfigurationDescriptor(configurationDescriptor);
 		List<ClasspathResource> classpathResources = Lists.newArrayList(configurationDescriptor.getResources());
 		Collections.sort(classpathResources, Collections.reverseOrder(new ResourceOrdering()));

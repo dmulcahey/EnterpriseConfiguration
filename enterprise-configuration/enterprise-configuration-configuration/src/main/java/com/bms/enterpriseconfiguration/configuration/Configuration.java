@@ -6,7 +6,7 @@ import com.bms.enterpriseconfiguration.resources.AbstractResource;
 
 public interface Configuration<R extends AbstractResource> extends org.apache.commons.configuration2.Configuration {
 
-	ConfigurationDescriptor<R> getCombinedConfigurationDescriptor();
+	ConfigurationDescriptor<R> getConfigurationDescriptor();
 	
 	/**
 	 * Returns the information contained in this Configuration as a Properties object.

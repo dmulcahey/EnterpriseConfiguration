@@ -3,7 +3,6 @@ package com.bms.enterpriseconfiguration.configuration.combined;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.apache.commons.configuration2.ConfigurationConverter;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
@@ -49,17 +48,13 @@ public class CombinedClasspathConfigurationResolverTest {
 		
 		ConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new ConfigurationDescriptorResolver<ClasspathResource>();
 		
-		CombinedClasspathConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathConfigurationResolver(combinedConfigurationDescriptorResolver);
+		CombinedClasspathPropertiesConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathPropertiesConfigurationResolver(combinedConfigurationDescriptorResolver);
 		
-		Set<CombinedClasspathConfiguration<ClasspathResource>> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.doResolution(resourceProviders);
+		Set<CombinedClasspathPropertiesConfiguration> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.doResolution(resourceProviders);
 		
-		for(CombinedClasspathConfiguration<ClasspathResource> combinedClasspathConfiguration : combinedClasspathConfigurations){
+		for(CombinedClasspathPropertiesConfiguration combinedClasspathConfiguration : combinedClasspathConfigurations){
 			Logger.getAnonymousLogger().info(combinedClasspathConfiguration.toString());
 		}
-		
-		
-		
-		
 	}
 	
 }

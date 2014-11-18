@@ -36,7 +36,7 @@ public class ConfigurationDescriptor<T extends AbstractResource> {
 
 	@Override
 	public String toString() {
-		return "CombinedConfigurationDescriptor [name=" + name + ", resources="
+		return "ConfigurationDescriptor [name=" + name + ", resources="
 				+ resources + "]";
 	}
 	

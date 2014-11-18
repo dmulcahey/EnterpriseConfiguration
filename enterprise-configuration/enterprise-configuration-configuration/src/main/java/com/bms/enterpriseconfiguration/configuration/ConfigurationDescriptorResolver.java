@@ -31,14 +31,23 @@ public class ConfigurationDescriptorResolver<T extends AbstractResource> extends
 		
 		for(ResourceProvider<Set<T>> resourceProvider : input){
 			for(T resource : resourceProvider.getResources()){
-				if(!allResourcesByName.containsKey(resource.getName())){
-					allResourcesByName.put(resource.getName(), Sets.<T>newHashSet());
+				String name = getResourceName(resource);
+				if(!allResourcesByName.containsKey(name)){
+					allResourcesByName.put(name, Sets.<T>newHashSet());
 				}
-				allResourcesByName.get(resource.getName()).add(resource);
+				allResourcesByName.get(name).add(resource);
 			}
 		}
 		
 		return allResourcesByName;
+	}
+	
+	private String getResourceName(T resource){
+		String name = resource.getName();
+		if(name.contains(".")){
+			name = name.substring(0, name.lastIndexOf("."));
+		}
+		return name;
 	}
 
 }
