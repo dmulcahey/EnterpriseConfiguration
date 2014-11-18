@@ -6,7 +6,7 @@ import com.bms.enterpriseconfiguration.core.AbstractResolver;
 import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 
-public abstract class AbstractConfigurationResolver<R extends AbstractResource> extends AbstractResolver<Set<? extends ResourceProvider<Set<R>>>, Set<? extends Configuration<R>>> {
+public abstract class AbstractConfigurationResolver<R extends AbstractResource, C extends Configuration<R>> extends AbstractResolver<Set<? extends ResourceProvider<Set<R>>>, Set<C>> {
 	
 	private ConfigurationDescriptorResolver<R> configurationDescriptorResolver;
 

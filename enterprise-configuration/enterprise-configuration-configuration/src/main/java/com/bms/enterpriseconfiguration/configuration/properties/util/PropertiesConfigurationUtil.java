@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.configuration.combined.util;
+package com.bms.enterpriseconfiguration.configuration.properties.util;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
