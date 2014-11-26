@@ -39,10 +39,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		for(CombinedClasspathPropertiesConfiguration configuration : combinedClasspathConfigurations){
 			componentConfiguration.getConfigurations().put(configuration.getConfigurationDescriptor().getName(), configuration);
 		}
-		Set<ClasspathResource> resources = resolveResources(criteria);
-		for(ClasspathResource resource : resources){
-			componentConfiguration.getResources().put(resource.getResourceName(), resource);
-		}
+		componentConfiguration.getResources().putAll(resolveResources(criteria));
 		return componentConfiguration;
 	}
 
@@ -92,12 +89,17 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return resourceProviders;
 	}
 	
-	private Set<ClasspathResource> resolveResources(Criteria criteria){
+	private Map<String, ClasspathResource> resolveResources(Criteria criteria){
 		FilteredClasspathResourceResourceProvider classpathResourcesProvider = new FilteredClasspathResourceResourceProvider(0, false);
 		Map<String,String> variables = buildVariables(criteria);
-		classpathResourcesProvider.add(new PathFilter(StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables)));
+		String componentResourceLocator = StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables);
+		classpathResourcesProvider.add(new PathFilter(componentResourceLocator));
 		classpathResourcesProvider.add(new NotFilter(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(".class"))));
-		return classpathResourcesProvider.getResources();
+		Map<String, ClasspathResource> resources = Maps.newHashMap();
+		for(ClasspathResource resource : classpathResourcesProvider.getResources()){
+			resources.put(resource.getResourceName().substring(componentResourceLocator.length()+1), resource);
+		}
+		return resources;
 	}
 	
 	private Map<String, String> buildVariables(Criteria criteria){

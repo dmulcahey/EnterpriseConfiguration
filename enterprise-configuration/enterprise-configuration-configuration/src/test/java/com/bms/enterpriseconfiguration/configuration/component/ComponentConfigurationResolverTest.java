@@ -1,5 +1,6 @@
 package com.bms.enterpriseconfiguration.configuration.component;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.logging.Logger;
@@ -16,6 +17,10 @@ public class ComponentConfigurationResolverTest {
 		criteria.setEnvironment("JUNIT");
 		ComponentConfiguration componentConfiguration = componentConfigurationResolver.resolve(criteria);
 		assertNotNull(componentConfiguration);
+		assertEquals(3, componentConfiguration.getConfigurations().size());
+		assertEquals(2, componentConfiguration.getResources().size());
+		assertNotNull(componentConfiguration.getResources().get("junk.xml"));
+		assertNotNull(componentConfiguration.getResources().get("someFolder/someResource.xml"));
 		Logger.getAnonymousLogger().info(componentConfiguration.toString());
 	}
 	
