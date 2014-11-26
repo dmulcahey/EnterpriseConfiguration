@@ -2,13 +2,12 @@ package com.bms.enterpriseconfiguration.core;
 
 import com.google.common.base.Optional;
 
-public class ResolutionTestResult extends AbstractPrintable {
+public class ResolutionTestResult {
 
-	private Optional<Throwable> possibleException;
-	private Optional<String> informationMessage;
-	private Optional<String> warningMessage;
-	private Optional<String> errorMessage;
-	private boolean successful;
+	private Optional<Throwable> possibleException = Optional.absent();
+	private Optional<String> informationMessage = Optional.absent();
+	private Optional<String> warningMessage = Optional.absent();
+	private Optional<String> errorMessage = Optional.absent();
 	
 	public Optional<Throwable> getPossibleException() {
 		return possibleException;
@@ -43,11 +42,7 @@ public class ResolutionTestResult extends AbstractPrintable {
 	}
 
 	public boolean isSuccessful() {
-		return successful;
-	}
-
-	public void setSuccessful(boolean successful) {
-		this.successful = successful;
+		return !errorMessage.isPresent();
 	}
 	
 }

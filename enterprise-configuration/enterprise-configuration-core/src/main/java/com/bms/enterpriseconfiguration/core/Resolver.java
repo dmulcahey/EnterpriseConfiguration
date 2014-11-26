@@ -1,7 +1,7 @@
 package com.bms.enterpriseconfiguration.core;
 
-public interface Resolver<INPUT,OUTPUT> {
+public interface Resolver<I,O> {
 
-	OUTPUT resolve(INPUT input);
+	O resolve(I input);
 	
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class CombinedResolutionTestResult extends AbstractPrintable {
+public class CombinedResolutionTestResult {
 
 	private List<ResolutionTestResult> resolutionTestResults;
 
@@ -13,6 +13,10 @@ public class CombinedResolutionTestResult extends AbstractPrintable {
 			resolutionTestResults = Lists.newArrayList();
 		}
 		return resolutionTestResults;
+	}
+	
+	public boolean addResolutionTestResult(ResolutionTestResult resolutionTestResult){
+		return this.getResolutionTestResults().add(resolutionTestResult);
 	}
 	
 	public boolean isSuccessful(){

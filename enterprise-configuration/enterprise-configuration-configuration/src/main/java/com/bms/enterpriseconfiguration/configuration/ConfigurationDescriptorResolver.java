@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
+import com.bms.enterpriseconfiguration.core.CombinedResolutionTestResult;
 import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.google.common.collect.Maps;
@@ -48,6 +49,18 @@ public class ConfigurationDescriptorResolver<T extends AbstractResource> extends
 			name = name.substring(0, name.lastIndexOf("."));
 		}
 		return name;
+	}
+
+	@Override
+	protected void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

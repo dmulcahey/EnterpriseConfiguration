@@ -14,67 +14,93 @@ import com.google.common.collect.Sets;
  * Perform postresolution activities using valid output
  * 
  */
-public abstract class AbstractResolver<INPUT,OUTPUT> implements Resolver<INPUT,OUTPUT> {
+public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 	
-	private Set<ResolutionActivity<INPUT>> preresolutionResolutionActivities;
-	private Set<ResolutionActivity<OUTPUT>> postresolutionResolutionActivities;
-	private Set<ResolutionTest<INPUT>> preresolutionResolutionTests;
-	private Set<ResolutionTest<OUTPUT>> postresolutionResolutionTests;
+	private Set<ResolutionActivity<I>> preresolutionActivities;
+	private Set<ResolutionActivity<O>> postresolutionActivities;
+	private Set<ResolutionTest<I>> preresolutionTests;
+	private Set<ResolutionTest<O>> postresolutionTests;
 
-	protected abstract OUTPUT doResolution(INPUT input);
+	protected abstract O doResolution(final I input);
+	
+	protected abstract void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult);
+	
+	protected abstract void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult);
 	
 	@Override
-	public OUTPUT resolve(INPUT input) {
+	public final O resolve(final I input) {
 		
-		CombinedResolutionTestResult preresolutionResolutionTestResults = new CombinedResolutionTestResult();
-		for(ResolutionTest<INPUT> resolutionTest : getPreresolutionResolutionTests()){
-			preresolutionResolutionTestResults.getResolutionTestResults().add(resolutionTest.execute(input));
+		CombinedResolutionTestResult preresolutionTestResults = new CombinedResolutionTestResult();
+		for(ResolutionTest<I> resolutionTest : getPreresolutionTests()){
+			preresolutionTestResults.addResolutionTestResult(resolutionTest.execute(input));
+		}
+		handlePreresolutionTestResults(preresolutionTestResults);
+		
+		for(ResolutionActivity<I> resolutionActivity : getPreresolutionActivities()){
+			resolutionActivity.perform(input);
 		}
 		
-		for(ResolutionActivity<INPUT> preresolutionResolutionActivity : getPreresolutionResolutionActivities()){
-			preresolutionResolutionActivity.perform(input);
+		O output = doResolution(input);
+		
+		CombinedResolutionTestResult postresolutionTestResults = new CombinedResolutionTestResult();
+		for(ResolutionTest<O> resolutionTest : getPostresolutionTests()){
+			postresolutionTestResults.addResolutionTestResult(resolutionTest.execute(output));
 		}
+		handlePostresolutionTestResults(postresolutionTestResults);
 		
-		OUTPUT output = doResolution(input);
-		
-		CombinedResolutionTestResult postresolutionResolutionTestResults = new CombinedResolutionTestResult();
-		for(ResolutionTest<OUTPUT> resolutionTest : getPostresolutionResolutionTests()){
-			postresolutionResolutionTestResults.getResolutionTestResults().add(resolutionTest.execute(output));
-		}
-		
-		for(ResolutionActivity<OUTPUT> postresolutionResolutionActivity : getPostresolutionResolutionActivities()){
-			postresolutionResolutionActivity.perform(output);
+		for(ResolutionActivity<O> postresolutionActivity : getPostresolutionActivities()){
+			postresolutionActivity.perform(output);
 		}
 		
 		return output;
 	}
 	
-	protected final Set<ResolutionActivity<INPUT>> getPreresolutionResolutionActivities(){
-		if(preresolutionResolutionActivities == null){
-			preresolutionResolutionActivities = Sets.newHashSet();
+	public final Set<ResolutionActivity<I>> getPreresolutionActivities(){
+		if(preresolutionActivities == null){
+			preresolutionActivities = Sets.newHashSet();
 		}
-		return preresolutionResolutionActivities;
+		return preresolutionActivities;
 	}
 	
-	protected final Set<ResolutionActivity<OUTPUT>> getPostresolutionResolutionActivities(){
-		if(postresolutionResolutionActivities == null){
-			postresolutionResolutionActivities = Sets.newHashSet();
+	public final Set<ResolutionActivity<O>> getPostresolutionActivities(){
+		if(postresolutionActivities == null){
+			postresolutionActivities = Sets.newHashSet();
 		}
-		return postresolutionResolutionActivities;
+		return postresolutionActivities;
 	}
 	
-	protected final Set<ResolutionTest<INPUT>> getPreresolutionResolutionTests(){
-		if(preresolutionResolutionTests == null){
-			preresolutionResolutionTests = Sets.newHashSet();
+	public final Set<ResolutionTest<I>> getPreresolutionTests(){
+		if(preresolutionTests == null){
+			preresolutionTests = Sets.newHashSet();
 		}
-		return preresolutionResolutionTests;
+		return preresolutionTests;
 	}
 	
-	protected final Set<ResolutionTest<OUTPUT>> getPostresolutionResolutionTests(){
-		if(postresolutionResolutionTests == null){
-			postresolutionResolutionTests = Sets.newHashSet();
+	public final Set<ResolutionTest<O>> getPostresolutionTests(){
+		if(postresolutionTests == null){
+			postresolutionTests = Sets.newHashSet();
 		}
-		return postresolutionResolutionTests;
+		return postresolutionTests;
+	}
+	
+	public final AbstractResolver<I,O> addPreresolutionActivity(final ResolutionActivity<I> preresolutionActivity){
+		this.getPreresolutionActivities().add(preresolutionActivity);
+		return this;
+	}
+	
+	public final AbstractResolver<I,O> addPostresolutionActivity(final ResolutionActivity<O> postresolutionActivity){
+		this.getPostresolutionActivities().add(postresolutionActivity);
+		return this;
+	}
+	
+	public final AbstractResolver<I,O> addPreresolutionTest(final ResolutionTest<I> preresolutionTest){
+		this.getPreresolutionTests().add(preresolutionTest);
+		return this;
+	}
+	
+	public final AbstractResolver<I,O> addPostresolutionTest(final ResolutionTest<O> postresolutionTest){
+		this.getPostresolutionTests().add(postresolutionTest);
+		return this;
 	}
 	
 }

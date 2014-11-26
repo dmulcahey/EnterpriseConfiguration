@@ -8,6 +8,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
 import com.bms.enterpriseconfiguration.configuration.properties.util.PropertiesConfigurationUtil;
+import com.bms.enterpriseconfiguration.core.CombinedResolutionTestResult;
 import com.bms.enterpriseconfiguration.resources.ResourceOrdering;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Lists;
@@ -16,7 +17,7 @@ public class CombinedClasspathPropertiesConfigurationResolver extends AbstractCl
 
 	public CombinedClasspathPropertiesConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);
-		this.getPostresolutionResolutionActivities().add(new CombinedClasspathPropertiesConfigurationImportHandler());
+		this.getPostresolutionActivities().add(new CombinedClasspathPropertiesConfigurationImportHandler());
 	}
 
 	@Override
@@ -29,6 +30,18 @@ public class CombinedClasspathPropertiesConfigurationResolver extends AbstractCl
 			combinedClasspathConfiguration.addConfiguration(PropertiesConfigurationUtil.buildPropertiesConfiguration(classpathResource));
 		}
 		return combinedClasspathConfiguration;
+	}
+
+	@Override
+	protected void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
