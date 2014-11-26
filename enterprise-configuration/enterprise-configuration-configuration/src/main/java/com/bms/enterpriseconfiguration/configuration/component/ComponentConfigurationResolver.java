@@ -107,7 +107,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return variables;
 	}
 	
-	//@TODO find a better name for this
+	//TODO find a better name for this
 	public static class Criteria {
 		private String componentName;
 		private String environment;

@@ -6,7 +6,7 @@ import com.bms.enterpriseconfiguration.configuration.properties.CombinedClasspat
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 
-//@TODO make this immutable and create a builder? 
+//TODO make this immutable and create a builder? 
 public class ComponentConfiguration {
 
 	private String name;
