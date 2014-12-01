@@ -55,7 +55,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		
 	}
 	
-	private Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){
+	private static Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = Sets.newHashSetWithExpectedSize(5);
 		
 		Map<String,String> variables = buildVariables(criteria);
@@ -89,7 +89,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return resourceProviders;
 	}
 	
-	private Map<String, ClasspathResource> resolveResources(Criteria criteria){
+	private static Map<String, ClasspathResource> resolveResources(Criteria criteria){
 		FilteredClasspathResourceResourceProvider classpathResourcesProvider = new FilteredClasspathResourceResourceProvider(0, false);
 		Map<String,String> variables = buildVariables(criteria);
 		String componentResourceLocator = StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables);
@@ -102,7 +102,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return resources;
 	}
 	
-	private Map<String, String> buildVariables(Criteria criteria){
+	private static Map<String, String> buildVariables(Criteria criteria){
 		Map<String,String> variables = Maps.newHashMapWithExpectedSize(2);
 		variables.put("componentName", criteria.getComponentName());
 		variables.put("environment", criteria.getEnvironment());

@@ -13,7 +13,7 @@ import com.google.common.reflect.ClassPath.ResourceInfo;
 
 public class ResourceInfoUtil {
 
-	public static Collection<String> getSubdirectoryNamesFromResourceInfo(Collection<ResourceInfo> resources, String parentDirectoryName) throws IOException{
+	public static Set<String> getSubdirectoryNamesFromResourceInfo(Collection<ResourceInfo> resources, String parentDirectoryName) throws IOException{
 		Set<String> subdirectoryNames = Sets.newHashSet();
 		Set<String> uniqueParrentDirectories = Sets.newHashSet();
 		for(ResourceInfo resourceInfo : resources){
