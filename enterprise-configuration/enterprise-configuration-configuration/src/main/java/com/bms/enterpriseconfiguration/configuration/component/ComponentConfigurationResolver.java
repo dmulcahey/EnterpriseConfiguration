@@ -59,49 +59,88 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	
 	private static Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = Sets.newHashSetWithExpectedSize(5);
-		
 		Map<String,String> variables = buildVariables(criteria);
+		OrFilter extensionFilter = new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION));
 		
 		FilteredClasspathResourceResourceProvider sharedResourcesProvider = new FilteredClasspathResourceResourceProvider(100);
 		sharedResourcesProvider.add(new PathFilter(SHARED_RESOURCES_LOCATOR));
-		sharedResourcesProvider.add(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION)));
+		sharedResourcesProvider.add(extensionFilter);
 		resourceProviders.add(sharedResourcesProvider);
 		
 		FilteredClasspathResourceResourceProvider environmentResourcesProvider = new FilteredClasspathResourceResourceProvider(200);
 		environmentResourcesProvider.add(new PathFilter(StrSubstitutor.replace(ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE, variables)));
-		environmentResourcesProvider.add(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION)));
+		environmentResourcesProvider.add(extensionFilter);
 		resourceProviders.add(environmentResourcesProvider);
 		
 		FilteredClasspathResourceResourceProvider componentResourcesProvider = new FilteredClasspathResourceResourceProvider(300);
 		componentResourcesProvider.add(new PathFilter(StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables)));
 		componentResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
-		componentResourcesProvider.add(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION)));
+		componentResourcesProvider.add(extensionFilter);
 		resourceProviders.add(componentResourcesProvider);
 		
 		FilteredClasspathResourceResourceProvider environmentOverridesResourcesProvider = new FilteredClasspathResourceResourceProvider(400);
 		environmentOverridesResourcesProvider.add(new PathFilter(StrSubstitutor.replace(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE, variables)));
-		environmentOverridesResourcesProvider.add(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION)));
+		environmentOverridesResourcesProvider.add(extensionFilter);
 		resourceProviders.add(environmentOverridesResourcesProvider);
 		
 		FilteredClasspathResourceResourceProvider secureResourcesProvider = new FilteredClasspathResourceResourceProvider(500, true);
 		secureResourcesProvider.add(new PathFilter(StrSubstitutor.replace(SECURE_RESOURCES_LOCATOR_TEMPLATE, variables)));
-		secureResourcesProvider.add(new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION)));
+		secureResourcesProvider.add(extensionFilter);
 		resourceProviders.add(secureResourcesProvider);
 		
 		return resourceProviders;
 	}
 	
 	private static Map<String, ClasspathResource> resolveResources(Criteria criteria){
-		FilteredClasspathResourceResourceProvider classpathResourcesProvider = new FilteredClasspathResourceResourceProvider(0, false);
 		Map<String,String> variables = buildVariables(criteria);
-		String componentResourceLocator = StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables);
-		classpathResourcesProvider.add(new PathFilter(componentResourceLocator));
-		classpathResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
-		classpathResourcesProvider.add(new NotFilter(new ExtensionFilter(CLASS_EXTENSION)));
 		Map<String, ClasspathResource> resources = Maps.newHashMap();
-		for(ClasspathResource resource : classpathResourcesProvider.getResources()){
+		NotFilter extensionFilter = new NotFilter(new ExtensionFilter(CLASS_EXTENSION));
+		
+		FilteredClasspathResourceResourceProvider sharedResourcesProvider = new FilteredClasspathResourceResourceProvider(100);
+		sharedResourcesProvider.add(new PathFilter(SHARED_RESOURCES_LOCATOR));
+		sharedResourcesProvider.add(extensionFilter);
+		
+		for(ClasspathResource resource : sharedResourcesProvider.getResources()){
+			resources.put(resource.getResourceName().substring(SHARED_RESOURCES_LOCATOR.length()+1), resource);
+		}
+		
+		FilteredClasspathResourceResourceProvider environmentResourcesProvider = new FilteredClasspathResourceResourceProvider(200);
+		String environmentResourcesLocator = StrSubstitutor.replace(ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE, variables);
+		environmentResourcesProvider.add(new PathFilter(environmentResourcesLocator));
+		environmentResourcesProvider.add(extensionFilter);
+		
+		for(ClasspathResource resource : environmentResourcesProvider.getResources()){
+			resources.put(resource.getResourceName().substring(environmentResourcesLocator.length()+1), resource);
+		}
+		
+		FilteredClasspathResourceResourceProvider componentResourcesProvider = new FilteredClasspathResourceResourceProvider(300);
+		String componentResourceLocator = StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables);
+		componentResourcesProvider.add(new PathFilter(componentResourceLocator));
+		componentResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
+		componentResourcesProvider.add(extensionFilter);
+		
+		for(ClasspathResource resource : componentResourcesProvider.getResources()){
 			resources.put(resource.getResourceName().substring(componentResourceLocator.length()+1), resource);
 		}
+		
+		FilteredClasspathResourceResourceProvider environmentOverridesResourcesProvider = new FilteredClasspathResourceResourceProvider(400);
+		String environmentOverrideResourcesLocator = StrSubstitutor.replace(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE, variables);
+		environmentOverridesResourcesProvider.add(new PathFilter(environmentOverrideResourcesLocator));
+		environmentOverridesResourcesProvider.add(extensionFilter);
+		
+		for(ClasspathResource resource : environmentOverridesResourcesProvider.getResources()){
+			resources.put(resource.getResourceName().substring(environmentOverrideResourcesLocator.length()+1), resource);
+		}
+		
+		FilteredClasspathResourceResourceProvider secureResourcesProvider = new FilteredClasspathResourceResourceProvider(500, true);
+		String secureResourcesLocator = StrSubstitutor.replace(SECURE_RESOURCES_LOCATOR_TEMPLATE, variables);
+		secureResourcesProvider.add(new PathFilter(secureResourcesLocator));
+		secureResourcesProvider.add(extensionFilter);
+		
+		for(ClasspathResource resource : secureResourcesProvider.getResources()){
+			resources.put(resource.getResourceName().substring(secureResourcesLocator.length()+1), resource);
+		}
+		
 		return resources;
 	}
 	

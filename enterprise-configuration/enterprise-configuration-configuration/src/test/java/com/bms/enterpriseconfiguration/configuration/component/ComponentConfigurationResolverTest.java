@@ -19,7 +19,7 @@ public class ComponentConfigurationResolverTest {
 		assertNotNull(componentConfiguration);
 		Logger.getAnonymousLogger().info(componentConfiguration.toString());
 		assertEquals(5, componentConfiguration.getConfigurations().size());
-		assertEquals(4, componentConfiguration.getResources().size());
+		assertEquals(6, componentConfiguration.getResources().size());
 		assertNotNull(componentConfiguration.getResources().get("junkXML.xml"));
 		assertNotNull(componentConfiguration.getResources().get("someFolder/someResource.xml"));
 		assertNotNull(componentConfiguration.getResources().get("someOtherFolder/someResource.xml"));
