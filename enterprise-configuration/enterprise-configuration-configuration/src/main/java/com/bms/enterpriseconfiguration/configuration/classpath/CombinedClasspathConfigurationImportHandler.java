@@ -13,6 +13,8 @@ import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 
 public class CombinedClasspathConfigurationImportHandler implements ResolutionActivity<Set<CombinedClasspathConfiguration>> {
+	
+	private static final String IMPORT_KEY = "importConfiguration";
 
 	@Override
 	public void perform(Set<CombinedClasspathConfiguration> input) {
@@ -23,7 +25,7 @@ public class CombinedClasspathConfigurationImportHandler implements ResolutionAc
 		for(CombinedClasspathConfiguration configuration : input){
 			for(ClasspathResource resource : configuration.getConfigurationDescriptor().getResources()){
 				try {
-					List<String> configurationsToImport = CommonsConfigurationUtil.buildConfiguration(resource).getList(String.class, "importConfiguration", Collections.<String>emptyList());
+					List<String> configurationsToImport = CommonsConfigurationUtil.buildConfiguration(resource).getList(String.class, IMPORT_KEY, Collections.<String>emptyList());
 					if(!configurationsToImport.isEmpty()){
 						for(String configurationToImport : configurationsToImport){
 							configuration.importConfiguration(configurationsByName.get(configurationToImport));
