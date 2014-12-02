@@ -30,7 +30,7 @@ public class CombinedClasspathConfigurationImportHandler implements ResolutionAc
 						}
 					}
 				} catch (ConfigurationException e) {
-					throw new RuntimeException(e);
+					throw new RuntimeException("Experienced an issue attempting to process a configuration import", e);
 				}
 			}
 		}
