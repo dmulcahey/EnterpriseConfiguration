@@ -1,4 +1,4 @@
-package com.bms.enterpriseconfiguration.configuration.properties;
+package com.bms.enterpriseconfiguration.configuration.classpath;
 
 import java.util.Set;
 
@@ -9,9 +9,9 @@ import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractClasspathPropertiesConfigurationResolver<T extends ClasspathPropertiesConfiguration> extends AbstractConfigurationResolver<ClasspathResource, T>{
+public abstract class AbstractClasspathConfigurationResolver<T extends ClasspathConfiguration> extends AbstractConfigurationResolver<ClasspathResource, T>{
 
-	public AbstractClasspathPropertiesConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
+	public AbstractClasspathConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);
 	}
 	

@@ -1,30 +1,30 @@
-package com.bms.enterpriseconfiguration.configuration.properties;
+package com.bms.enterpriseconfiguration.configuration.classpath;
 
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.configuration2.AbstractConfiguration;
 import org.apache.commons.configuration2.ConfigurationConverter;
-import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
 
 import com.bms.enterpriseconfiguration.configuration.Configuration;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
-import com.bms.enterpriseconfiguration.configuration.properties.util.PropertiesConfigurationUtil;
+import com.bms.enterpriseconfiguration.configuration.classpath.util.CommonsConfigurationUtil;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Sets;
 
-public class CombinedClasspathPropertiesConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements ClasspathPropertiesConfiguration {
+public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements ClasspathConfiguration {
 	
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
 	private Set<String> importedConfigurations = Sets.newHashSet();
 	
-	public CombinedClasspathPropertiesConfiguration() {
+	public CombinedClasspathConfiguration() {
 		this(new OverrideCombiner());
 	}
 
-	public CombinedClasspathPropertiesConfiguration(NodeCombiner nodeCombiner) {
+	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
 		super(nodeCombiner);
 		this.getInterpolator().setEnableSubstitutionInVariables(true);
 	}
@@ -45,18 +45,18 @@ public class CombinedClasspathPropertiesConfiguration extends org.apache.commons
 
 	@Override
 	public Properties getAsPrintableProperties() {
-		CombinedClasspathPropertiesConfiguration clone = (CombinedClasspathPropertiesConfiguration) this.clone();
+		CombinedClasspathConfiguration clone = (CombinedClasspathConfiguration) this.clone();
 		clone.getInterpolator().setEnableSubstitutionInVariables(true);
 		for(ClasspathResource resource : clone.getConfigurationDescriptor().getResources()){
 			if(resource.isSecure()){
 				try {
-					PropertiesConfiguration propertiesConfiguration = PropertiesConfigurationUtil.buildPropertiesConfiguration(resource);
-					Properties properties = ConfigurationConverter.getProperties(propertiesConfiguration);
+					AbstractConfiguration configuration = CommonsConfigurationUtil.buildConfiguration(resource);
+					Properties properties = ConfigurationConverter.getProperties(configuration);
 					for(Object key : properties.keySet()){
 						clone.setProperty((String)key, "[SECURED:VALUE_NOT_SHOWN]");
 					}
 				} catch (ConfigurationException e) {
-					throw new RuntimeException("Unable to clone CombinedClasspathPropertiesConfiguration: " + getConfigurationDescriptor().getName(), e);
+					throw new RuntimeException("Unable to clone CombinedClasspathConfiguration: " + getConfigurationDescriptor().getName(), e);
 				}
 			}
 		}
@@ -81,7 +81,7 @@ public class CombinedClasspathPropertiesConfiguration extends org.apache.commons
 		return sb.toString();
 	}
 	
-	void importConfiguration(CombinedClasspathPropertiesConfiguration configuration){
+	void importConfiguration(CombinedClasspathConfiguration configuration){
 		importedConfigurations.add(configuration.getConfigurationDescriptor().getName());
 		this.addConfiguration(configuration, configuration.getConfigurationDescriptor().getName());
 	}

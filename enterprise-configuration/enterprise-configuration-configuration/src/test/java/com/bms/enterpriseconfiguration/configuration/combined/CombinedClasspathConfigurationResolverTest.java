@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
-import com.bms.enterpriseconfiguration.configuration.properties.ClasspathPropertiesConfiguration;
-import com.bms.enterpriseconfiguration.configuration.properties.CombinedClasspathPropertiesConfiguration;
-import com.bms.enterpriseconfiguration.configuration.properties.CombinedClasspathPropertiesConfigurationResolver;
+import com.bms.enterpriseconfiguration.configuration.classpath.ClasspathConfiguration;
+import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
+import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.FilteredClasspathResourceResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ExtensionFilter;
@@ -51,11 +51,11 @@ public class CombinedClasspathConfigurationResolverTest {
 		
 		ConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new ConfigurationDescriptorResolver<ClasspathResource>();
 		
-		CombinedClasspathPropertiesConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathPropertiesConfigurationResolver(combinedConfigurationDescriptorResolver);
+		CombinedClasspathConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathConfigurationResolver(combinedConfigurationDescriptorResolver);
 		
-		Set<CombinedClasspathPropertiesConfiguration> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.resolve(resourceProviders);
+		Set<CombinedClasspathConfiguration> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.resolve(resourceProviders);
 		
-		for(ClasspathPropertiesConfiguration combinedClasspathConfiguration : combinedClasspathConfigurations){
+		for(ClasspathConfiguration combinedClasspathConfiguration : combinedClasspathConfigurations){
 			Logger.getAnonymousLogger().info(combinedClasspathConfiguration.toString());
 		}
 	}

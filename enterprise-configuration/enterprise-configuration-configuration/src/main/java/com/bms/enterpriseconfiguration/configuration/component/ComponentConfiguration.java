@@ -2,7 +2,7 @@ package com.bms.enterpriseconfiguration.configuration.component;
 
 import java.util.Map;
 
-import com.bms.enterpriseconfiguration.configuration.properties.CombinedClasspathPropertiesConfiguration;
+import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 
@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 public class ComponentConfiguration {
 
 	private String name;
-	private Map<String, CombinedClasspathPropertiesConfiguration> configurations = Maps.newHashMap();
+	private Map<String, CombinedClasspathConfiguration> configurations = Maps.newHashMap();
 	private Map<String, ClasspathResource> resources = Maps.newHashMap();
 	
 	public String getName() {
@@ -21,7 +21,7 @@ public class ComponentConfiguration {
 		this.name = name;
 	}
 
-	public Map<String, CombinedClasspathPropertiesConfiguration> getConfigurations() {
+	public Map<String, CombinedClasspathConfiguration> getConfigurations() {
 		return configurations;
 	}
 
