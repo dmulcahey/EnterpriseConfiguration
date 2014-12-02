@@ -60,6 +60,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	private static Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = Sets.newHashSetWithExpectedSize(5);
 		Map<String,String> variables = buildVariables(criteria);
+		// TODO need to implement duplicate configuration names because we chop off the extension. 
 		OrFilter extensionFilter = new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION));
 		
 		FilteredClasspathResourceResourceProvider sharedResourcesProvider = new FilteredClasspathResourceResourceProvider(100);

@@ -28,6 +28,16 @@ public class ComponentConfiguration {
 	public Map<String, ClasspathResource> getResources() {
 		return resources;
 	}
+	
+	// TODO should this throw an exception if it doesn't exist?
+	public CombinedClasspathConfiguration getConfiguration(String configurationName) {
+		return getConfigurations().get(configurationName);
+	}
+	
+	// TODO should this throw an exception if it doesn't exist?
+	public ClasspathResource getResource(String resourceLocator){
+		return getResources().get(resourceLocator);
+	}
 
 	@Override
 	public String toString() {
