@@ -46,7 +46,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 			@Override
 			public boolean apply(ResourceInfo resourceInfo) {
 				boolean accept = true;
-				for(ResourceFilter filter : getResourceFilters()){
+				for(ResourceFilter filter : resourceFilters){
 					accept = accept && filter.accept(resourceInfo.getResourceName());
 				}
 				return accept;
@@ -92,13 +92,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 	private FilteredClasspathResourceResourceProvider(Builder builder){
 		this.order = builder.order;
 		this.secure = builder.secure;
-		this.getResourceFilters().addAll(builder.resourceFilters);
+		this.resourceFilters = ImmutableSet.copyOf(builder.resourceFilters);
 	}
 	
-	private Set<ResourceFilter> getResourceFilters() {
-		if(resourceFilters == null){
-			resourceFilters = Sets.newHashSet();
-		}
-		return resourceFilters;
-	}
 }
