@@ -26,9 +26,6 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	private static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = "EnvironmentResources/${environment}";
 	private static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = "SecureResources/${environment}/${componentName}";
 	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE = "ComponentResources/${componentName}/EnvironmentOverrides/${environment}";
-	private static final String PROPERTIES_EXTENSION = ".properties";
-	private static final String XML_EXTENSION = ".xml";
-	private static final String CLASS_EXTENSION = ".class";
 	
 	@Override
 	protected ComponentConfiguration doResolution(Criteria criteria) {
