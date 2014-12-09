@@ -13,9 +13,10 @@ import com.google.common.reflect.ClassPath.ResourceInfo;
 public class ClasspathResourceUtil {
 
 	public static Set<String> getSubdirectoryNamesFromParentDirectory(final String parentDirectoryName) throws IOException{
-		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = new FilteredClasspathResourceResourceProvider();
-		classpathResourceResourceProvider.setOrder(100);
-		classpathResourceResourceProvider.add(new PathFilter(parentDirectoryName));
+		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(100)
+			.withResourceFilter(new PathFilter(parentDirectoryName))
+			.build();
 		Set<ClasspathResource> resources = classpathResourceResourceProvider.getResources();
 		Set<ResourceInfo> resourceInfos = Sets.newHashSetWithExpectedSize(resources.size());
 		for(ClasspathResource resource : resources){

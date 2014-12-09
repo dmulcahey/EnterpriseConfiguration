@@ -21,26 +21,37 @@ public class CombinedClasspathConfigurationResolverTest {
 	
 	@Test
 	public void testCombinedClasspathConfigurationResolver(){
-		FilteredClasspathResourceResourceProvider componentResourcesProvider = new FilteredClasspathResourceResourceProvider(300);
-		componentResourcesProvider.add(new PathFilter("ComponentResources/Configuration"));
-		componentResourcesProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
-		componentResourcesProvider.add(new ExtensionFilter(".properties"));
+		FilteredClasspathResourceResourceProvider componentResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(300)
+			.withResourceFilter(new PathFilter("ComponentResources/Configuration"))
+			.withResourceFilter(new NotFilter(new PathFilter("EnvironmentOverrides")))
+			.withResourceFilter(new ExtensionFilter(".properties"))
+			.build();
 		
-		FilteredClasspathResourceResourceProvider environmentOverridesResourcesProvider = new FilteredClasspathResourceResourceProvider(400);
-		environmentOverridesResourcesProvider.add(new PathFilter("ComponentResources/Configuration/EnvironmentOverrides/JUNIT"));
-		environmentOverridesResourcesProvider.add(new ExtensionFilter(".properties"));
+		FilteredClasspathResourceResourceProvider environmentOverridesResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(400)
+			.withResourceFilter(new PathFilter("ComponentResources/Configuration/EnvironmentOverrides/JUNIT"))
+			.withResourceFilter(new ExtensionFilter(".properties"))
+			.build();
 		
-		FilteredClasspathResourceResourceProvider environmentResourcesProvider = new FilteredClasspathResourceResourceProvider(200);
-		environmentResourcesProvider.add(new PathFilter("EnvironmentResources/JUNIT"));
-		environmentResourcesProvider.add(new ExtensionFilter(".properties"));
+		FilteredClasspathResourceResourceProvider environmentResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(200)
+			.withResourceFilter(new PathFilter("EnvironmentResources/JUNIT"))
+			.withResourceFilter(new ExtensionFilter(".properties"))
+			.build();
 		
-		FilteredClasspathResourceResourceProvider sharedResourcesProvider = new FilteredClasspathResourceResourceProvider(100);
-		sharedResourcesProvider.add(new PathFilter("SharedResources"));
-		sharedResourcesProvider.add(new ExtensionFilter(".properties"));
+		FilteredClasspathResourceResourceProvider sharedResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(100)
+			.withResourceFilter(new PathFilter("SharedResources"))
+			.withResourceFilter(new ExtensionFilter(".properties"))
+			.build();
 		
-		FilteredClasspathResourceResourceProvider secureResourcesProvider = new FilteredClasspathResourceResourceProvider(500, true);
-		secureResourcesProvider.add(new PathFilter("SecureResources/JUNIT/Configuration"));
-		secureResourcesProvider.add(new ExtensionFilter(".properties"));
+		FilteredClasspathResourceResourceProvider secureResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(500)
+			.secure(true)
+			.withResourceFilter(new PathFilter("SecureResources/JUNIT/Configuration"))
+			.withResourceFilter(new ExtensionFilter(".properties"))
+			.build();
 		
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = Sets.newHashSetWithExpectedSize(4);
 		resourceProviders.add(componentResourcesProvider);

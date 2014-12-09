@@ -6,6 +6,7 @@ import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ResourceFilter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 
@@ -25,47 +26,18 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 		}
 	}
 	
-	public FilteredClasspathResourceResourceProvider() {
-		super();
-	}
-	
-	public FilteredClasspathResourceResourceProvider(int order) {
-		this.order = order;
-	}
-	
-	public FilteredClasspathResourceResourceProvider(int order, boolean secure) {
-		super();
-		this.order = order;
-		this.secure = secure;
+	public static Builder builder(){
+		return new Builder();
 	}
 
 	@Override
 	public int getOrder() {
 		return order;
 	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
-	
-	public Set<ResourceFilter> getResourceFilters() {
-		if(resourceFilters == null){
-			resourceFilters = Sets.newHashSet();
-		}
-		return resourceFilters;
-	}
-	
-	public boolean add(ResourceFilter resourceFilter) {
-		return getResourceFilters().add(resourceFilter);
-	}
 	
 	@Override
 	public boolean isSecure() {
 		return secure;
-	}
-
-	public void setSecure(boolean secure) {
-		this.secure = secure;
 	}
 
 	@Override
@@ -84,7 +56,49 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 		for(ResourceInfo resourceInfo : resources){
 			classpathResources.add(new ClasspathResource(resourceInfo, this));
 		}
-		return classpathResources;
+		return ImmutableSet.copyOf(classpathResources);
 	}
 	
+	public static class Builder {
+		private int order = 0;
+		private boolean secure;
+		private Set<ResourceFilter> resourceFilters = Sets.newHashSet();
+		
+		private Builder(){
+			
+		}
+		
+		public Builder order(int order){
+			this.order = order;
+			return this;
+		}
+		
+		public Builder secure(boolean secure){
+			this.secure = secure;
+			return this;
+		}
+		
+		public Builder withResourceFilter(ResourceFilter filter){
+			this.resourceFilters.add(filter);
+			return this;
+		}
+		
+		public FilteredClasspathResourceResourceProvider build(){
+			return new FilteredClasspathResourceResourceProvider(this);
+		}
+		
+	}
+	
+	private FilteredClasspathResourceResourceProvider(Builder builder){
+		this.order = builder.order;
+		this.secure = builder.secure;
+		this.getResourceFilters().addAll(builder.resourceFilters);
+	}
+	
+	private Set<ResourceFilter> getResourceFilters() {
+		if(resourceFilters == null){
+			resourceFilters = Sets.newHashSet();
+		}
+		return resourceFilters;
+	}
 }

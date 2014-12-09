@@ -13,20 +13,29 @@ public class FilteredClasspathResourceResourceProviderTest {
 	
 	@Test
 	public void testFilteredClasspathResourceResourceProvider(){
-		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = new FilteredClasspathResourceResourceProvider();
-		classpathResourceResourceProvider.setOrder(100);
-		classpathResourceResourceProvider.add(new PathFilter("ComponentResources"));
+		FilteredClasspathResourceResourceProvider classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
+			.order(100)
+			.withResourceFilter(new PathFilter("ComponentResources"))
+			.build();
 		
 		Logger.getAnonymousLogger().info(classpathResourceResourceProvider.toString());
 		
 		Logger.getAnonymousLogger().info(classpathResourceResourceProvider.getResources().toString());
 		
-		classpathResourceResourceProvider.add(new NotFilter(new PathFilter("EnvironmentOverrides")));
+		classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
+		.order(100)
+		.withResourceFilter(new PathFilter("ComponentResources"))
+		.withResourceFilter(new NotFilter(new PathFilter("EnvironmentOverrides")))
+		.build();
+		
 		Logger.getAnonymousLogger().info(classpathResourceResourceProvider.getResources().toString());
 		
-		classpathResourceResourceProvider.getResourceFilters().clear();
-		classpathResourceResourceProvider.add(new PathFilter("ComponentResources"));
-		classpathResourceResourceProvider.getResourceFilters().add(new NotFilter(new ExtensionFilter(".properties")));
+		classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
+		.order(100)
+		.withResourceFilter(new PathFilter("ComponentResources"))
+		.withResourceFilter(new NotFilter(new ExtensionFilter(".properties")))
+		.build();
+		
 		Logger.getAnonymousLogger().info(classpathResourceResourceProvider.getResources().toString());
 	}
 	
