@@ -61,7 +61,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = Sets.newHashSetWithExpectedSize(5);
 		Map<String,String> variables = buildVariables(criteria);
 		// TODO need to implement duplicate configuration names because we chop off the extension. 
-		OrFilter extensionFilter = new OrFilter(new ExtensionFilter(PROPERTIES_EXTENSION), new ExtensionFilter(XML_EXTENSION));
+		OrFilter extensionFilter = new OrFilter(ExtensionFilter.PROPERTIES_FILTER, ExtensionFilter.XML_FILTER);
 		
 		FilteredClasspathResourceResourceProvider sharedResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
 			.order(100)
@@ -106,7 +106,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	private static Map<String, ClasspathResource> resolveResources(Criteria criteria){
 		Map<String,String> variables = buildVariables(criteria);
 		Map<String, ClasspathResource> resources = Maps.newHashMap();
-		NotFilter extensionFilter = new NotFilter(new ExtensionFilter(CLASS_EXTENSION));
+		NotFilter extensionFilter = new NotFilter(ExtensionFilter.CLASS_FILTER);
 		
 		FilteredClasspathResourceResourceProvider sharedResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
 			.order(100)

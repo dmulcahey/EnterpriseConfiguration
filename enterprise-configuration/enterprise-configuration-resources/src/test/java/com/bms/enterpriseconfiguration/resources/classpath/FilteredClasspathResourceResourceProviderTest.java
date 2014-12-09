@@ -33,7 +33,7 @@ public class FilteredClasspathResourceResourceProviderTest {
 		classpathResourceResourceProvider = FilteredClasspathResourceResourceProvider.builder()
 		.order(100)
 		.withResourceFilter(new PathFilter("ComponentResources"))
-		.withResourceFilter(new NotFilter(new ExtensionFilter(".properties")))
+		.withResourceFilter(new NotFilter(ExtensionFilter.PROPERTIES_FILTER))
 		.build();
 		
 		Logger.getAnonymousLogger().info(classpathResourceResourceProvider.getResources().toString());
