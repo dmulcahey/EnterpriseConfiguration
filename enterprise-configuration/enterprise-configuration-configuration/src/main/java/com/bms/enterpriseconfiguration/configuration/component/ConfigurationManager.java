@@ -1,38 +1,20 @@
 package com.bms.enterpriseconfiguration.configuration.component;
 
-import java.lang.reflect.Method;
-
 import com.bms.enterpriseconfiguration.configuration.classpath.ClasspathConfiguration;
+import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationProxy;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
-import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.Reflection;
 
 public class ConfigurationManager {
 
 	public ClasspathConfiguration getConfiguration(final String componentName, final String configurationName, final String environment) {
-		return Reflection.newProxy(ClasspathConfiguration.class, new AbstractInvocationHandler(){
-
-			@Override
-			protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
-				ComponentConfigurationResolver componentConfigurationResolver = new ComponentConfigurationResolver();
-				ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria();
-				criteria.setComponentName(componentName);
-				criteria.setEnvironment(environment);
-				ComponentConfiguration componentConfiguration = componentConfigurationResolver.doResolution(criteria);
-				return method.invoke(componentConfiguration.getConfiguration(configurationName), args);
-			}
-
-			@Override
-			public String toString() {
-				ComponentConfigurationResolver componentConfigurationResolver = new ComponentConfigurationResolver();
-				ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria();
-				criteria.setComponentName(componentName);
-				criteria.setEnvironment(environment);
-				ComponentConfiguration componentConfiguration = componentConfigurationResolver.doResolution(criteria);
-				return componentConfiguration.getConfiguration(configurationName).toString();
-			}
-			
-		});
+		return Reflection.newProxy(ClasspathConfiguration.class, CombinedClasspathConfigurationProxy
+				.builder()
+				.componentConfigurationResolver(new ComponentConfigurationResolver())
+				.componentName(componentName)
+				.configurationName(configurationName)
+				.environment(environment)
+				.build());
 	}
 	
 	public ClasspathConfiguration getConfiguration(final String componentName, final String configurationName) {
