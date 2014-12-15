@@ -33,13 +33,13 @@ public class CombinedClasspathConfigurationResolver extends AbstractClasspathCon
 	}
 
 	@Override
-	protected void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult) {
+	public void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult) {
+	public void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult) {
 		// TODO Auto-generated method stub
 		
 	}

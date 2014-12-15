@@ -23,10 +23,6 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 
 	protected abstract O doResolution(final I input);
 	
-	protected abstract void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult);
-	
-	protected abstract void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult);
-	
 	@Override
 	public final O resolve(final I input) {
 		
