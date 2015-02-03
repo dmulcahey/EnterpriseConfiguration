@@ -9,7 +9,6 @@ import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorReso
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
-import com.bms.enterpriseconfiguration.core.CombinedResolutionTestResult;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.FilteredClasspathResourceResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ExtensionFilter;
@@ -20,8 +19,11 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class ComponentConfigurationResolver extends AbstractResolver<ComponentConfigurationResolver.Criteria, ComponentConfiguration>{
-
+	public static final String COMPONENT_NAME = "componentName";
+	public static final String ENVIRONMENT = "environment";
+	
 	private static final String SHARED_RESOURCES_LOCATOR = "SharedResources";
+	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR = "EnvironmentOverrides";
 	private static final String COMPONENT_RESOURCES_LOCATOR_TEMPLATE = "ComponentResources/${componentName}";
 	private static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = "EnvironmentResources/${environment}";
 	private static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = "SecureResources/${environment}/${componentName}";
@@ -40,18 +42,6 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		}
 		componentConfiguration.getResources().putAll(resolveResources(criteria));
 		return componentConfiguration;
-	}
-
-	@Override
-	public void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private static Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){
@@ -77,7 +67,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		FilteredClasspathResourceResourceProvider componentResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
 			.order(300)
 			.withResourceFilter(new PathFilter(StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables)))
-			.withResourceFilter(new NotFilter(new PathFilter("EnvironmentOverrides")))
+			.withResourceFilter(new NotFilter(new PathFilter(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR)))
 			.withResourceFilter(extensionFilter)
 			.build();
 		resourceProviders.add(componentResourcesProvider);
@@ -130,7 +120,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		FilteredClasspathResourceResourceProvider componentResourcesProvider = FilteredClasspathResourceResourceProvider.builder()
 			.order(300)
 			.withResourceFilter(new PathFilter(componentResourceLocator))
-			.withResourceFilter(new NotFilter(new PathFilter("EnvironmentOverrides")))
+			.withResourceFilter(new NotFilter(new PathFilter(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR)))
 			.withResourceFilter(extensionFilter)
 			.build();
 		
@@ -166,8 +156,8 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	
 	private static Map<String, String> buildVariables(Criteria criteria){
 		Map<String,String> variables = Maps.newHashMapWithExpectedSize(2);
-		variables.put("componentName", criteria.getComponentName());
-		variables.put("environment", criteria.getEnvironment());
+		variables.put(COMPONENT_NAME, criteria.getComponentName());
+		variables.put(ENVIRONMENT, criteria.getEnvironment());
 		return variables;
 	}
 	

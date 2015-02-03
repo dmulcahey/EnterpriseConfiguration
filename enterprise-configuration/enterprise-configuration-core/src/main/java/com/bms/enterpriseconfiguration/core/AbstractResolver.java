@@ -99,4 +99,18 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 		return this;
 	}
 	
+	public void handlePreresolutionTestResults(CombinedResolutionTestResult preresolutionTestResult){
+		handleResolutionTestResults(preresolutionTestResult);
+	}
+	
+	public void handlePostresolutionTestResults(CombinedResolutionTestResult postresolutionTestResult){
+		handleResolutionTestResults(postresolutionTestResult);
+	}
+	
+	private void handleResolutionTestResults(CombinedResolutionTestResult resolutionTestResult){
+		if(!resolutionTestResult.isSuccessful()){
+			throw new RuntimeException("Resolution Failed...");
+		}
+	}
+	
 }
