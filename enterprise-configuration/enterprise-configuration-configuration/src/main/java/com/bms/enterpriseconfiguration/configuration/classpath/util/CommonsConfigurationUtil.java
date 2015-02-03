@@ -11,13 +11,16 @@ import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 
 public class CommonsConfigurationUtil {
 	
+	public static final String PROPERTIES_EXTENSION = ".properties";
+	public static final String XML_EXTENSION = ".xml";
+	
 	public static AbstractConfiguration buildConfiguration(ClasspathResource classpathResource) throws ConfigurationException {
-		if(classpathResource.getResourceName().endsWith(".properties")){
+		if(classpathResource.getResourceName().endsWith(PROPERTIES_EXTENSION)){
 			FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
 				    new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
 				    .configure(new Parameters().fileBased().setURL(classpathResource.getURL()));
 			return builder.getConfiguration();
-		}else if(classpathResource.getResourceName().endsWith(".xml")){
+		}else if(classpathResource.getResourceName().endsWith(XML_EXTENSION)){
 			FileBasedConfigurationBuilder<XMLConfiguration> builder =
 				    new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
 				    .configure(new Parameters().fileBased().setURL(classpathResource.getURL()));
