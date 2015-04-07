@@ -5,11 +5,12 @@ import java.util.Set;
 import com.bms.enterpriseconfiguration.configuration.AbstractConfigurationResolver;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
+import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractClasspathConfigurationResolver<T extends ClasspathConfiguration> extends AbstractConfigurationResolver<ClasspathResource, T>{
+public abstract class AbstractClasspathConfigurationResolver<T extends FileBasedConfiguration<ClasspathResource>> extends AbstractConfigurationResolver<ClasspathResource, T>{
 
 	public AbstractClasspathConfigurationResolver(ConfigurationDescriptorResolver<ClasspathResource> configurationDescriptorResolver) {
 		super(configurationDescriptorResolver);

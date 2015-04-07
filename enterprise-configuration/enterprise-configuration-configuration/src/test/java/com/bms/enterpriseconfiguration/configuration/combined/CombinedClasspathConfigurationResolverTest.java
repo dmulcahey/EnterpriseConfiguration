@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
-import com.bms.enterpriseconfiguration.configuration.classpath.ClasspathConfiguration;
+import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
@@ -66,7 +66,7 @@ public class CombinedClasspathConfigurationResolverTest {
 		
 		Set<CombinedClasspathConfiguration> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.resolve(resourceProviders);
 		
-		for(ClasspathConfiguration combinedClasspathConfiguration : combinedClasspathConfigurations){
+		for(FileBasedConfiguration<ClasspathResource> combinedClasspathConfiguration : combinedClasspathConfigurations){
 			Logger.getAnonymousLogger().info(combinedClasspathConfiguration.toString());
 		}
 	}

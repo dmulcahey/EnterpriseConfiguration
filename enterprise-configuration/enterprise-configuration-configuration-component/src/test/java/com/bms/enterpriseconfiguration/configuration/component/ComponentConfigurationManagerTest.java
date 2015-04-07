@@ -7,16 +7,17 @@ import java.util.logging.Logger;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.junit.Test;
 
-import com.bms.enterpriseconfiguration.configuration.classpath.ClasspathConfiguration;
+import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
+import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 
 public class ComponentConfigurationManagerTest {
 
 	@Test
 	public void testGetConfiguration(){
-		ClasspathConfiguration configuration = ComponentConfigurationManager.getConfiguration("Configuration", "junk", "JUNIT");
+		FileBasedConfiguration<ClasspathResource> configuration = ComponentConfigurationManager.getConfiguration("Configuration", "junk", "JUNIT");
 		Logger.getAnonymousLogger().info(configuration.toString());
 		
-		ClasspathConfiguration secureConfiguration = ComponentConfigurationManager.getConfiguration("Configuration", "FileShare", "JUNIT");
+		FileBasedConfiguration<ClasspathResource> secureConfiguration = ComponentConfigurationManager.getConfiguration("Configuration", "FileShare", "JUNIT");
 		
 		Logger.getAnonymousLogger().info(secureConfiguration.toString());
 		

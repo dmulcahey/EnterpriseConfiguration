@@ -1,11 +1,11 @@
-package com.bms.enterpriseconfiguration.configuration.classpath;
+package com.bms.enterpriseconfiguration.configuration;
 
 import java.util.Properties;
 
-import com.bms.enterpriseconfiguration.configuration.Configuration;
-import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
+import com.bms.enterpriseconfiguration.resources.AbstractResource;
 
-public interface ClasspathConfiguration extends Configuration<ClasspathResource> {
+
+public interface FileBasedConfiguration<T extends AbstractResource> extends Configuration<T> {
 
 	/**
 	 * Returns the information contained in this Configuration as a Properties object.

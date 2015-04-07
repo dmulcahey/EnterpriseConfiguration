@@ -12,13 +12,14 @@ import org.apache.commons.configuration2.tree.OverrideCombiner;
 
 import com.bms.enterpriseconfiguration.configuration.Configuration;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
+import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.util.CommonsConfigurationUtil;
 import com.bms.enterpriseconfiguration.configuration.lookup.DecryptionLookup;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements ClasspathConfiguration {
+public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements FileBasedConfiguration<ClasspathResource> {
 	
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
 	private Set<String> importedConfigurations = Sets.newHashSet();
