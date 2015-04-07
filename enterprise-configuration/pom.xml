@@ -40,4 +40,5 @@
 		<module>enterprise-configuration-resources</module>
 		<module>enterprise-configuration-configuration</module>
 	</modules>
+
 </project>

@@ -1,5 +1,7 @@
 package com.bms.enterpriseconfiguration.configuration.component;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -21,13 +23,18 @@ import com.google.common.collect.Sets;
 public class ComponentConfigurationResolver extends AbstractResolver<ComponentConfigurationResolver.Criteria, ComponentConfiguration>{
 	public static final String COMPONENT_NAME = "componentName";
 	public static final String ENVIRONMENT = "environment";
+	public static final String ENVIRONMENT_RESOURCES = "EnvironmentResources";
+	public static final String COMPONENT_RESOURCES = "ComponentResources";
+	public static final String ENVIRONMENT_OVERRIDE_RESOURCES = "EnvironmentOverrides";
+	public static final String SECURE_RESOURCES = "SecureResources";
+	public static final String SHARED_RESOURCES = "SharedResources";
 	
-	private static final String SHARED_RESOURCES_LOCATOR = "SharedResources";
-	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR = "EnvironmentOverrides";
-	private static final String COMPONENT_RESOURCES_LOCATOR_TEMPLATE = "ComponentResources/${componentName}";
-	private static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = "EnvironmentResources/${environment}";
-	private static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = "SecureResources/${environment}/${componentName}";
-	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE = "ComponentResources/${componentName}/EnvironmentOverrides/${environment}";
+	private static final String SHARED_RESOURCES_LOCATOR = SHARED_RESOURCES;
+	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR = ENVIRONMENT_OVERRIDE_RESOURCES;
+	private static final String COMPONENT_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}";
+	private static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = ENVIRONMENT_RESOURCES + "/${environment}";
+	private static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = SECURE_RESOURCES + "/${environment}/${componentName}";
+	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}/" + ENVIRONMENT_OVERRIDE_RESOURCES + "/${environment}";
 	
 	@Override
 	protected ComponentConfiguration doResolution(Criteria criteria) {
@@ -163,23 +170,23 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	
 	//TODO find a better name for this
 	public static class Criteria {
-		private String componentName;
-		private String environment;
+		private final String componentName;
+		private final String environment;
 		
+		public Criteria(String componentName, String environment) {
+			super();
+			checkNotNull(componentName, "componentName is required");
+			checkNotNull(environment, "environment is required");
+			this.componentName = componentName;
+			this.environment = environment;
+		}
+
 		public String getComponentName() {
 			return componentName;
 		}
 		
-		public void setComponentName(String componentName) {
-			this.componentName = componentName;
-		}
-		
 		public String getEnvironment() {
 			return environment;
-		}
-		
-		public void setEnvironment(String environment) {
-			this.environment = environment;
 		}
 		
 		@Override

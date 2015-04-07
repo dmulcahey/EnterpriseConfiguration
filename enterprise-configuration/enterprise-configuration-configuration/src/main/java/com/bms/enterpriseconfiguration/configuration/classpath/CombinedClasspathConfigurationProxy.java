@@ -3,9 +3,9 @@ package com.bms.enterpriseconfiguration.configuration.classpath;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import com.bms.enterpriseconfiguration.configuration.component.ComponentConfiguration;
-import com.bms.enterpriseconfiguration.configuration.component.ComponentConfigurationResolver;
 import com.google.common.reflect.AbstractInvocationHandler;
 
 public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandler {
@@ -13,23 +13,19 @@ public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandl
 	private String componentName;
 	private String environment;
 	private String configurationName;
-	private ComponentConfigurationResolver componentConfigurationResolver;
+	private Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment;
 
 	@Override
 	protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
-		ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria();
-		criteria.setComponentName(this.componentName);
-		criteria.setEnvironment(this.environment);
-		ComponentConfiguration componentConfiguration = this.componentConfigurationResolver.resolve(criteria);
+		Map<String, ComponentConfiguration> componentConfigurationsInEnvironment = this.componentConfigurationsByEnvironment.get(this.environment);
+		ComponentConfiguration componentConfiguration = componentConfigurationsInEnvironment.get(this.componentName);
 		return method.invoke(componentConfiguration.getConfiguration(this.configurationName), args);
 	}
 	
 	@Override
 	public String toString() {
-		ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria();
-		criteria.setComponentName(this.componentName);
-		criteria.setEnvironment(this.environment);
-		ComponentConfiguration componentConfiguration = this.componentConfigurationResolver.resolve(criteria);
+		Map<String, ComponentConfiguration> componentConfigurationsInEnvironment = this.componentConfigurationsByEnvironment.get(this.environment);
+		ComponentConfiguration componentConfiguration = componentConfigurationsInEnvironment.get(this.componentName);
 		return componentConfiguration.getConfiguration(this.configurationName).toString();
 	}
 	
@@ -42,7 +38,7 @@ public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandl
 		private String componentName;
 		private String environment;
 		private String configurationName;
-		private ComponentConfigurationResolver componentConfigurationResolver;
+		private Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment;
 		
 		private Builder(){}
 		
@@ -61,8 +57,8 @@ public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandl
 			return this;
 		}
 		
-		public Builder componentConfigurationResolver(ComponentConfigurationResolver componentConfigurationResolver){
-			this.componentConfigurationResolver = checkNotNull(componentConfigurationResolver, "The componentConfigurationResolver can not be null.");
+		public Builder componentConfigurationsByEnvironment(Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment){
+			this.componentConfigurationsByEnvironment = checkNotNull(componentConfigurationsByEnvironment, "The componentConfigurationResolver can not be null.");
 			return this;
 		}
 		
@@ -76,7 +72,7 @@ public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandl
 		this.componentName = builder.componentName;
 		this.configurationName = builder.configurationName;
 		this.environment = builder.environment;
-		this.componentConfigurationResolver = builder.componentConfigurationResolver;
+		this.componentConfigurationsByEnvironment = builder.componentConfigurationsByEnvironment;
 	}
 
 }
