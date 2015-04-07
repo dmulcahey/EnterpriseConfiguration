@@ -1,6 +1,6 @@
 package com.bms.enterpriseconfiguration.configuration.classpath.util;
 
-import org.apache.commons.configuration2.AbstractConfiguration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -14,7 +14,7 @@ public class CommonsConfigurationUtil {
 	public static final String PROPERTIES_EXTENSION = ".properties";
 	public static final String XML_EXTENSION = ".xml";
 	
-	public static AbstractConfiguration buildConfiguration(ClasspathResource classpathResource) throws ConfigurationException {
+	public static Configuration buildConfiguration(ClasspathResource classpathResource) throws ConfigurationException {
 		if(classpathResource.getResourceName().endsWith(PROPERTIES_EXTENSION)){
 			FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
 				    new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)

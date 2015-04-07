@@ -1,31 +1,42 @@
 package com.bms.enterpriseconfiguration.configuration.classpath;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.configuration2.AbstractConfiguration;
 import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
 
 import com.bms.enterpriseconfiguration.configuration.Configuration;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.classpath.util.CommonsConfigurationUtil;
+import com.bms.enterpriseconfiguration.configuration.lookup.DecryptionLookup;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class CombinedClasspathConfiguration extends org.apache.commons.configuration2.CombinedConfiguration implements ClasspathConfiguration {
 	
 	private ConfigurationDescriptor<ClasspathResource> combinedConfigurationDescriptor;
 	private Set<String> importedConfigurations = Sets.newHashSet();
+	private static final Map<String, Lookup> LOOKUPS = Maps.newHashMap();
+	
+	static{
+		LOOKUPS.put("decrypt", new DecryptionLookup());
+	}
 	
 	public CombinedClasspathConfiguration() {
 		this(new OverrideCombiner());
+		this.setPrefixLookups(LOOKUPS);
+		this.getInterpolator().setEnableSubstitutionInVariables(true);
 	}
 
 	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
 		super(nodeCombiner);
+		this.setPrefixLookups(LOOKUPS);
 		this.getInterpolator().setEnableSubstitutionInVariables(true);
 	}
 
@@ -50,7 +61,7 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 		for(ClasspathResource resource : clone.getConfigurationDescriptor().getResources()){
 			if(resource.isSecure()){
 				try {
-					AbstractConfiguration configuration = CommonsConfigurationUtil.buildConfiguration(resource);
+					org.apache.commons.configuration2.Configuration configuration = CommonsConfigurationUtil.buildConfiguration(resource);
 					Properties properties = ConfigurationConverter.getProperties(configuration);
 					for(Object key : properties.keySet()){
 						clone.setProperty((String)key, "[SECURED:VALUE_NOT_SHOWN]");
