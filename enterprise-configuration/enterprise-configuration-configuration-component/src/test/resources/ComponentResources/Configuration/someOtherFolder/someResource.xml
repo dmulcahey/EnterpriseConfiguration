@@ -1,0 +1,4 @@
+<someResource>
+	<location>someOtherFolder</location>
+	<someOtherFolder>someOtherFolder</someOtherFolder>
+</someResource>

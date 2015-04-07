@@ -1,0 +1,4 @@
+<someResource>
+	<location>EnvironmentOverrides</location>
+	<someFolder>someFolder</someFolder>
+</someResource>
