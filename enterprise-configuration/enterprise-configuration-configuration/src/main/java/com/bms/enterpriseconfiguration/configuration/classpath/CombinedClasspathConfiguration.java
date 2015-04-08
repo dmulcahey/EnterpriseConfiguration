@@ -30,24 +30,26 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 	
 	static{
 		LOOKUPS.put("decrypt", new DecryptionLookup());
+		
+		
+	}
+	
+	public CombinedClasspathConfiguration() {
+		this(new OverrideCombiner());
+	}
+
+	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
+		super(nodeCombiner);
+		this.getInterpolator().setEnableSubstitutionInVariables(true);
+		Map<String, Lookup> myLookups = Maps.newHashMap(LOOKUPS);
 		ExprLookup.Variables variables = new ExprLookup.Variables();
 		variables.add(new ExprLookup.Variable("String", StringUtils.class));
 		variables.add(new ExprLookup.Variable("System", "Class:java.lang.System"));
 		variables.add(new ExprLookup.Variable(PropertyUtil.PREFIX, PropertyUtil.class));
 		ExprLookup expressionLookup = new ExprLookup(variables);
-		LOOKUPS.put("expr", expressionLookup);
-	}
-	
-	public CombinedClasspathConfiguration() {
-		this(new OverrideCombiner());
-		this.setPrefixLookups(LOOKUPS);
-		this.getInterpolator().setEnableSubstitutionInVariables(true);
-	}
-
-	public CombinedClasspathConfiguration(NodeCombiner nodeCombiner) {
-		super(nodeCombiner);
-		this.setPrefixLookups(LOOKUPS);
-		this.getInterpolator().setEnableSubstitutionInVariables(true);
+		expressionLookup.setInterpolator(this.getInterpolator());
+		myLookups.put("expr", expressionLookup);
+		this.setPrefixLookups(myLookups);
 	}
 
 	@Override
