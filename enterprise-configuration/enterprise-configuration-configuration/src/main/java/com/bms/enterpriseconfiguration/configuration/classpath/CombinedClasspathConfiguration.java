@@ -35,7 +35,7 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 		variables.add(new ExprLookup.Variable("System", "Class:java.lang.System"));
 		variables.add(new ExprLookup.Variable(PropertyUtil.PREFIX, PropertyUtil.class));
 		ExprLookup expressionLookup = new ExprLookup(variables);
-		LOOKUPS.put("decrypt", expressionLookup);
+		LOOKUPS.put("expr", expressionLookup);
 	}
 	
 	public CombinedClasspathConfiguration() {
