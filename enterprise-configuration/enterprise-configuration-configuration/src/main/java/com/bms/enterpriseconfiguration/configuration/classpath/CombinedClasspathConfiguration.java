@@ -6,14 +6,17 @@ import java.util.Set;
 
 import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.interpol.ExprLookup;
 import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.commons.configuration2.tree.NodeCombiner;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
+import org.apache.commons.lang3.StringUtils;
 
 import com.bms.enterpriseconfiguration.configuration.Configuration;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.util.CommonsConfigurationUtil;
+import com.bms.enterpriseconfiguration.configuration.classpath.util.PropertyUtil;
 import com.bms.enterpriseconfiguration.configuration.lookup.DecryptionLookup;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
@@ -27,6 +30,12 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 	
 	static{
 		LOOKUPS.put("decrypt", new DecryptionLookup());
+		ExprLookup.Variables variables = new ExprLookup.Variables();
+		variables.add(new ExprLookup.Variable("String", StringUtils.class));
+		variables.add(new ExprLookup.Variable("System", "Class:java.lang.System"));
+		variables.add(new ExprLookup.Variable(PropertyUtil.PREFIX, PropertyUtil.class));
+		ExprLookup expressionLookup = new ExprLookup(variables);
+		LOOKUPS.put("decrypt", expressionLookup);
 	}
 	
 	public CombinedClasspathConfiguration() {

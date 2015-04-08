@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 public class CombinedClasspathConfigurationImportHandler implements ResolutionActivity<Set<CombinedClasspathConfiguration>> {
 	
 	private static final String IMPORT_KEY = "importConfiguration";
+	private static final String DEPRECATED_IMPORT_KEY = "importConfig";
 
 	@Override
 	public void perform(Set<CombinedClasspathConfiguration> input) {
@@ -26,6 +27,7 @@ public class CombinedClasspathConfigurationImportHandler implements ResolutionAc
 			for(ClasspathResource resource : configuration.getConfigurationDescriptor().getResources()){
 				try {
 					List<String> configurationsToImport = CommonsConfigurationUtil.buildConfiguration(resource).getList(String.class, IMPORT_KEY, Collections.<String>emptyList());
+					configurationsToImport.addAll(CommonsConfigurationUtil.buildConfiguration(resource).getList(String.class, DEPRECATED_IMPORT_KEY, Collections.<String>emptyList()));
 					if(!configurationsToImport.isEmpty()){
 						for(String configurationToImport : configurationsToImport){
 							configuration.importConfiguration(configurationsByName.get(configurationToImport));
