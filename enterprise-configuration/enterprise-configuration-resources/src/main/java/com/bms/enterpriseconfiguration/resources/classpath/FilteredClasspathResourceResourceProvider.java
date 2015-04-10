@@ -3,12 +3,11 @@ package com.bms.enterpriseconfiguration.resources.classpath;
 import java.util.Set;
 
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
+import com.bms.enterpriseconfiguration.resources.classpath.ClassPath.ResourceInfo;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ResourceFilter;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Sets;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
-import com.google.common.reflect.ClassPath.ResourceInfo;
+import com.google.common.collect.Sets;
 
 public class FilteredClasspathResourceResourceProvider implements ResourceProvider<Set<ClasspathResource>> {
 

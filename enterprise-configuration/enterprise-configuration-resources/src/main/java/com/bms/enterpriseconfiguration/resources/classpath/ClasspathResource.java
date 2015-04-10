@@ -8,7 +8,7 @@ import org.apache.commons.vfs2.VFS;
 
 import com.bms.enterpriseconfiguration.resources.AbstractResource;
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
-import com.google.common.reflect.ClassPath.ResourceInfo;
+import com.bms.enterpriseconfiguration.resources.classpath.ClassPath.ResourceInfo;
 
 public class ClasspathResource extends AbstractResource {
 	

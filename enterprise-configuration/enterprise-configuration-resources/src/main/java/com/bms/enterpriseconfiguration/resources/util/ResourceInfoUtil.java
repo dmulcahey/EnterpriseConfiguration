@@ -8,8 +8,8 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.VFS;
 
+import com.bms.enterpriseconfiguration.resources.classpath.ClassPath.ResourceInfo;
 import com.google.common.collect.Sets;
-import com.google.common.reflect.ClassPath.ResourceInfo;
 
 public class ResourceInfoUtil {
 

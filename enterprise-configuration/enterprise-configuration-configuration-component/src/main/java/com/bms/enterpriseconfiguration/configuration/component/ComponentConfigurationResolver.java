@@ -2,6 +2,7 @@ package com.bms.enterpriseconfiguration.configuration.component;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,10 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
+import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionActivity;
+import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionTest;
+import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPreresolutionActivity;
+import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPreresolutionTest;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.FilteredClasspathResourceResourceProvider;
@@ -17,6 +22,7 @@ import com.bms.enterpriseconfiguration.resources.classpath.filter.ExtensionFilte
 import com.bms.enterpriseconfiguration.resources.classpath.filter.NotFilter;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.OrFilter;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.PathFilter;
+import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -49,6 +55,26 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		}
 		componentConfiguration.getResources().putAll(resolveResources(criteria));
 		return componentConfiguration;
+	}
+	
+	@Override
+	public Optional<Class<? extends Annotation>> getPreresolutionTestAnnotationClass(){
+		return Optional.<Class<? extends Annotation>>of(ComponentConfigurationResolverPreresolutionTest.class);
+	}
+	
+	@Override
+	public Optional<Class<? extends Annotation>> getPostresolutionTestAnnotationClass(){
+		return Optional.<Class<? extends Annotation>>of(ComponentConfigurationResolverPostresolutionTest.class);
+	}
+	
+	@Override
+	public Optional<Class<? extends Annotation>> getPreresolutionActivityAnnotationClass(){
+		return Optional.<Class<? extends Annotation>>of(ComponentConfigurationResolverPreresolutionActivity.class);
+	}
+	
+	@Override
+	public Optional<Class<? extends Annotation>> getPostresolutionActivityAnnotationClass(){
+		return Optional.<Class<? extends Annotation>>of(ComponentConfigurationResolverPostresolutionActivity.class);
 	}
 	
 	private static Set<FilteredClasspathResourceResourceProvider> buildResourceProviders(Criteria criteria){

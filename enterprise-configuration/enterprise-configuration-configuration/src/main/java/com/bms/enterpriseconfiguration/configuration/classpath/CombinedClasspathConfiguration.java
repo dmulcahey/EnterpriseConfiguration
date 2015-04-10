@@ -30,8 +30,6 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 	
 	static{
 		LOOKUPS.put("decrypt", new DecryptionLookup());
-		
-		
 	}
 	
 	public CombinedClasspathConfiguration() {

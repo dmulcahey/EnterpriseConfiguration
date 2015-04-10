@@ -1,7 +1,13 @@
 package com.bms.enterpriseconfiguration.core;
 
+import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.util.logging.Logger;
+import lombok.SneakyThrows;
 
+import org.reflections.Reflections;
+
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
 /*
@@ -15,11 +21,16 @@ import com.google.common.collect.Sets;
  * 
  */
 public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
-	
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
+	private static final Reflections REFLECTIONS = new Reflections();
 	private Set<ResolutionActivity<I>> preresolutionActivities;
 	private Set<ResolutionActivity<O>> postresolutionActivities;
 	private Set<ResolutionTest<I>> preresolutionTests;
 	private Set<ResolutionTest<O>> postresolutionTests;
+	
+	public AbstractResolver(){
+		initialize();
+	}
 
 	protected abstract O doResolution(final I input);
 	
@@ -78,7 +89,7 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 		}
 		return postresolutionTests;
 	}
-	
+
 	public final AbstractResolver<I,O> addPreresolutionActivity(final ResolutionActivity<I> preresolutionActivity){
 		this.getPreresolutionActivities().add(preresolutionActivity);
 		return this;
@@ -107,10 +118,65 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 		handleResolutionTestResults(postresolutionTestResult);
 	}
 	
+	public Optional<Class<? extends Annotation>> getPreresolutionTestAnnotationClass(){
+		return Optional.absent();
+	}
+	
+	public Optional<Class<? extends Annotation>> getPostresolutionTestAnnotationClass(){
+		return Optional.absent();
+	}
+	
+	public Optional<Class<? extends Annotation>> getPreresolutionActivityAnnotationClass(){
+		return Optional.absent();
+	}
+	
+	public Optional<Class<? extends Annotation>> getPostresolutionActivityAnnotationClass(){
+		return Optional.absent();
+	}
+	
 	private void handleResolutionTestResults(CombinedResolutionTestResult resolutionTestResult){
 		if(!resolutionTestResult.isSuccessful()){
 			throw new RuntimeException("Resolution Failed...");
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	private void initialize(){
+		logger.info("initializing started...");
+		logger.fine("loading preresolution tests");
+		Optional<Class<? extends Annotation>> preresolutionTestAnnotationClass = getPreresolutionTestAnnotationClass();
+		if(preresolutionTestAnnotationClass.isPresent()){
+			Set<Class<?>> preresolutionTests = REFLECTIONS.getTypesAnnotatedWith(preresolutionTestAnnotationClass.get());
+			for(Class<?> preresolutionTestClass : preresolutionTests){
+				this.addPreresolutionTest((ResolutionTest<I>) preresolutionTestClass.getConstructor().newInstance());
+			}
+		}
+		logger.fine("loading postresolution tests");
+		Optional<Class<? extends Annotation>> postresolutionTestAnnotationClass = getPostresolutionTestAnnotationClass();
+		if(postresolutionTestAnnotationClass.isPresent()){
+			Set<Class<?>> postresolutionTests = REFLECTIONS.getTypesAnnotatedWith(postresolutionTestAnnotationClass.get());
+			for(Class<?> postresolutionTestClass : postresolutionTests){
+				this.addPostresolutionTest((ResolutionTest<O>) postresolutionTestClass.getConstructor().newInstance());
+			}
+		}
+		logger.fine("loading preresolution activities");
+		Optional<Class<? extends Annotation>> preresolutionActivityAnnotationClass = getPreresolutionActivityAnnotationClass();
+		if(preresolutionActivityAnnotationClass.isPresent()){
+			Set<Class<?>> preresolutionActivitiess = REFLECTIONS.getTypesAnnotatedWith(preresolutionActivityAnnotationClass.get());
+			for(Class<?> preresolutionActivityClass : preresolutionActivitiess){
+				this.addPreresolutionActivity((ResolutionActivity<I>) preresolutionActivityClass.getConstructor().newInstance());
+			}
+		}
+		logger.fine("loading postresolution activities");
+		Optional<Class<? extends Annotation>> postresolutionActivityAnnotationClass = getPostresolutionActivityAnnotationClass();
+		if(postresolutionActivityAnnotationClass.isPresent()){
+			Set<Class<?>> postresolutionActivitiess = REFLECTIONS.getTypesAnnotatedWith(postresolutionActivityAnnotationClass.get());
+			for(Class<?> postresolutionActivityClass : postresolutionActivitiess){
+				this.addPostresolutionActivity((ResolutionActivity<O>) postresolutionActivityClass.getConstructor().newInstance());
+			}
+		}
+		logger.info("initializing complete...");
 	}
 	
 }

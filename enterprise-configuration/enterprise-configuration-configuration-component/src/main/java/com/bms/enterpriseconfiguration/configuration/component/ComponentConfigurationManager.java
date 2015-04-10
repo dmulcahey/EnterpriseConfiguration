@@ -83,7 +83,7 @@ public class ComponentConfigurationManager {
 	
 	@SneakyThrows
 	private static void initialize(){
-		LOGGER.info("initializing ComponentConfigurationManager started...");
+		LOGGER.info("initializing started...");
 		Set<String> environmentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.ENVIRONMENT_RESOURCES);
 		LOGGER.fine("Environments on classpath: " + environmentNames);
 		Set<String> componentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.COMPONENT_RESOURCES);
@@ -102,7 +102,7 @@ public class ComponentConfigurationManager {
 			COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.put(environmentName, componentConfigurations);
 		}
 		LOGGER.fine("All fully resolved component configurations by environment: " + COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT);
-		LOGGER.info("initializing ComponentConfigurationManager complete!");
+		LOGGER.info("initializing complete!");
 	}
 	
 }
