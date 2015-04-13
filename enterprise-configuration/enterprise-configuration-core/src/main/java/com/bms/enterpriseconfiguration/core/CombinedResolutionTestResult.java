@@ -2,6 +2,8 @@ package com.bms.enterpriseconfiguration.core;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public class CombinedResolutionTestResult {
@@ -15,7 +17,8 @@ public class CombinedResolutionTestResult {
 		return resolutionTestResults;
 	}
 	
-	public boolean addResolutionTestResult(ResolutionTestResult resolutionTestResult){
+	public boolean addResolutionTestResult(ResolutionTestResult resolutionTestResult, String testClassName){
+		resolutionTestResult.setTestClassName(testClassName);
 		return this.getResolutionTestResults().add(resolutionTestResult);
 	}
 	
@@ -25,6 +28,16 @@ public class CombinedResolutionTestResult {
 			successful = successful && resolutionTestResult.isSuccessful();
 		}
 		return successful;
+	}
+	
+	public List<ResolutionTestResult> getFailedTestResults(){
+		return Lists.newArrayList(Iterables.filter(getResolutionTestResults(), 
+				new Predicate<ResolutionTestResult>(){
+					@Override
+					public boolean apply(ResolutionTestResult input) {
+						return !input.isSuccessful();
+					}
+				}));
 	}
 	
 }

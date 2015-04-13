@@ -8,6 +8,7 @@ public class ResolutionTestResult {
 	private Optional<String> informationMessage = Optional.absent();
 	private Optional<String> warningMessage = Optional.absent();
 	private Optional<String> errorMessage = Optional.absent();
+	private String testClassName;
 	
 	public Optional<Throwable> getPossibleException() {
 		return possibleException;
@@ -43,6 +44,22 @@ public class ResolutionTestResult {
 
 	public boolean isSuccessful() {
 		return !errorMessage.isPresent();
+	}
+	
+	String getTestClassName(){
+		return this.testClassName;
+	}
+	
+	void setTestClassName(String className){
+		this.testClassName = className;
+	}
+
+	@Override
+	public String toString() {
+		return "ResolutionTestResult [possibleException=" + possibleException
+				+ ", informationMessage=" + informationMessage
+				+ ", warningMessage=" + warningMessage + ", errorMessage="
+				+ errorMessage + ", testClassName=" + testClassName + "]";
 	}
 	
 }

@@ -7,11 +7,13 @@ import java.util.Set;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
+import com.bms.enterpriseconfiguration.configuration.classpath.annotation.CombinedClasspathConfigurationResolverPostresolutionActivity;
 import com.bms.enterpriseconfiguration.configuration.classpath.util.CommonsConfigurationUtil;
 import com.bms.enterpriseconfiguration.core.ResolutionActivity;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.google.common.collect.Maps;
 
+@CombinedClasspathConfigurationResolverPostresolutionActivity
 public class CombinedClasspathConfigurationImportHandler implements ResolutionActivity<Set<CombinedClasspathConfiguration>> {
 	
 	private static final String IMPORT_KEY = "importConfiguration";
