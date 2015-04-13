@@ -35,12 +35,12 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	public static final String SECURE_RESOURCES = "SecureResources";
 	public static final String SHARED_RESOURCES = "SharedResources";
 	
-	private static final String SHARED_RESOURCES_LOCATOR = SHARED_RESOURCES + "/";
-	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR = ENVIRONMENT_OVERRIDE_RESOURCES + "/";
-	private static final String COMPONENT_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}/";
-	private static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = ENVIRONMENT_RESOURCES + "/${environment}/";
-	private static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = SECURE_RESOURCES + "/${environment}/${componentName}/";
-	private static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}/" + ENVIRONMENT_OVERRIDE_RESOURCES + "/${environment}/";
+	public static final String SHARED_RESOURCES_LOCATOR = SHARED_RESOURCES + "/";
+	public static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR = ENVIRONMENT_OVERRIDE_RESOURCES + "/";
+	public static final String COMPONENT_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}/";
+	public static final String ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE = ENVIRONMENT_RESOURCES + "/${environment}/";
+	public static final String SECURE_RESOURCES_LOCATOR_TEMPLATE = SECURE_RESOURCES + "/${environment}/${componentName}/";
+	public static final String ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE = COMPONENT_RESOURCES + "/${componentName}/" + ENVIRONMENT_OVERRIDE_RESOURCES + "/${environment}/";
 	
 	@Override
 	protected ComponentConfiguration doResolution(Criteria criteria) {
@@ -187,7 +187,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return resources;
 	}
 	
-	private static Map<String, String> buildVariables(Criteria criteria){
+	public static Map<String, String> buildVariables(Criteria criteria){
 		Map<String,String> variables = Maps.newHashMapWithExpectedSize(2);
 		variables.put(COMPONENT_NAME, criteria.getComponentName());
 		variables.put(ENVIRONMENT, criteria.getEnvironment());
