@@ -42,4 +42,9 @@ public class CombinedClasspathConfigurationImportHandler implements ResolutionAc
 		}
 	}
 
+	@Override
+	public int getOrder() {
+		return ResolutionActivity.HIGHEST_PRECEDENCE;
+	}
+
 }

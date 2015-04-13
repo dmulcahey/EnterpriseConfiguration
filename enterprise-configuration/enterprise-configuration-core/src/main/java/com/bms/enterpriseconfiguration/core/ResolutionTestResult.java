@@ -43,7 +43,7 @@ public class ResolutionTestResult {
 	}
 
 	public boolean isSuccessful() {
-		return !errorMessage.isPresent();
+		return !errorMessage.isPresent() && !possibleException.isPresent();
 	}
 	
 	String getTestClassName(){
