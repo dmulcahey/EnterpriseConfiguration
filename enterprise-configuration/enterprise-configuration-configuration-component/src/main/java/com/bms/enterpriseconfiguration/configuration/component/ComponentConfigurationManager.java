@@ -1,14 +1,19 @@
 package com.bms.enterpriseconfiguration.configuration.component;
 
+import java.lang.management.ManagementFactory;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import lombok.SneakyThrows;
 
 import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationProxy;
+import com.bms.enterpriseconfiguration.configuration.component.management.ComponentConfigurationManagerMXBeanImpl;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.util.ClasspathResourceUtil;
 import com.google.common.base.Optional;
@@ -25,6 +30,7 @@ public class ComponentConfigurationManager {
 	private static Optional<String> DEFAULT_COMPONENT_NAME;
 	
 	static{
+		registerMXBean();
 		initialize();
 	}
 
@@ -103,6 +109,13 @@ public class ComponentConfigurationManager {
 		}
 		LOGGER.fine("All fully resolved component configurations by environment: " + COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT);
 		LOGGER.info("initializing complete!");
+	}
+	
+	@SneakyThrows
+	private static void registerMXBean(){
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer(); 
+        ObjectName objectName = new ObjectName("com.bms.enterpriseconfiguration.configuration.component.management:type=ComponentConfigurationManagerMXBean");
+        mBeanServer.registerMBean(new ComponentConfigurationManagerMXBeanImpl(), objectName); 
 	}
 	
 }
