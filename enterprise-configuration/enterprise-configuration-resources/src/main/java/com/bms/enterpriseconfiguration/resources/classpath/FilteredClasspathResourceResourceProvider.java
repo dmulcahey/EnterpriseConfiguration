@@ -1,17 +1,26 @@
 package com.bms.enterpriseconfiguration.resources.classpath;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Set;
+
+import lombok.extern.java.Log;
 
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.ClassPath.ResourceInfo;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ResourceFilter;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+@Log
 public class FilteredClasspathResourceResourceProvider implements ResourceProvider<Set<ClasspathResource>> {
 
 	private static final ClassPath CLASSPATH;
+	private static final Class<?>[] PARAMETERS = new Class<?>[] {URL.class};
 	
 	private Set<ResourceFilter> resourceFilters;
 	private int order = 0;
@@ -19,6 +28,28 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 	
 	static{
 		try{
+			String classpathAugment = System.getProperty("cfgmgr.classpath");
+			if(!Strings.isNullOrEmpty(classpathAugment)){
+				String[] pathAugmentsToAdd = classpathAugment.split(File.pathSeparator);
+				URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		        Class<URLClassLoader> sysclass = URLClassLoader.class;
+		        Method method = null;
+		        try {
+		        	method = sysclass.getDeclaredMethod("addURL", PARAMETERS);
+		        }catch(Exception e){
+		        	throw new RuntimeException("Error, can not augment system classloader!", e);
+		        }
+	            method.setAccessible(true);
+				for(String classpathAugmentToAdd : pathAugmentsToAdd){
+					try {
+			            method.invoke(sysloader, new Object[] {new File(classpathAugmentToAdd).toURI().toURL()});
+			            log.info("Augmented runtime classpath: " + classpathAugmentToAdd + " was added to the System class loader...");
+			        } catch (Throwable t) {
+			            t.printStackTrace();
+			            throw new RuntimeException("Error, could not add url to system classloader: " + classpathAugmentToAdd);
+			        }
+				}
+			}
 			CLASSPATH = ClassPath.from(Thread.currentThread().getContextClassLoader());
 		}catch(Exception e){
 			throw new RuntimeException(e);
