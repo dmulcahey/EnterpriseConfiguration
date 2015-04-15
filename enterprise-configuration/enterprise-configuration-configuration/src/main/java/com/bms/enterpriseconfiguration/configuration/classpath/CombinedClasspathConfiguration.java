@@ -43,6 +43,7 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 		ExprLookup.Variables variables = new ExprLookup.Variables();
 		variables.add(new ExprLookup.Variable("String", StringUtils.class));
 		variables.add(new ExprLookup.Variable("System", "Class:java.lang.System"));
+		variables.add(new ExprLookup.Variable("Math", "Class:java.lang.Math"));
 		variables.add(new ExprLookup.Variable(PropertyUtil.PREFIX, PropertyUtil.class));
 		ExprLookup expressionLookup = new ExprLookup(variables);
 		expressionLookup.setInterpolator(this.getInterpolator());

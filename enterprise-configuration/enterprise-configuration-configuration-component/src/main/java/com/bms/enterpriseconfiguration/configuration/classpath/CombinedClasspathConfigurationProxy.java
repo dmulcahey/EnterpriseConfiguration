@@ -10,10 +10,10 @@ import com.google.common.reflect.AbstractInvocationHandler;
 
 public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandler {
 	
-	private String componentName;
-	private String environment;
-	private String configurationName;
-	private Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment;
+	private final String componentName;
+	private final String environment;
+	private final String configurationName;
+	private final Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment;
 
 	@Override
 	protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
@@ -57,8 +57,9 @@ public class CombinedClasspathConfigurationProxy extends AbstractInvocationHandl
 			return this;
 		}
 		
+		//live reference to an existing map. this map MUST be thread safe!!!
 		public Builder componentConfigurationsByEnvironment(Map<String, Map<String, ComponentConfiguration>> componentConfigurationsByEnvironment){
-			this.componentConfigurationsByEnvironment = checkNotNull(componentConfigurationsByEnvironment, "The componentConfigurationResolver can not be null.");
+			this.componentConfigurationsByEnvironment = checkNotNull(componentConfigurationsByEnvironment, "The componentConfigurationsByEnvironment can not be null.");
 			return this;
 		}
 		
