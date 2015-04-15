@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
-import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfiguration;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionActivity;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionTest;
@@ -48,17 +47,14 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	
 	@Override
 	protected ComponentConfiguration doResolution(Criteria criteria) {
-		ComponentConfiguration componentConfiguration = new ComponentConfiguration();
-		componentConfiguration.setName(criteria.getComponentName());
+		ComponentConfiguration.Builder componentConfigurationBuilder = ComponentConfiguration.builder();
+		componentConfigurationBuilder.name(criteria.getComponentName());
 		Set<FilteredClasspathResourceResourceProvider> resourceProviders = buildResourceProviders(criteria);
 		ConfigurationDescriptorResolver<ClasspathResource> combinedConfigurationDescriptorResolver = new ConfigurationDescriptorResolver<ClasspathResource>();
 		CombinedClasspathConfigurationResolver combinedClasspathConfigurationResolver = new CombinedClasspathConfigurationResolver(combinedConfigurationDescriptorResolver);
-		Set<CombinedClasspathConfiguration> combinedClasspathConfigurations = combinedClasspathConfigurationResolver.resolve(resourceProviders);
-		for(CombinedClasspathConfiguration configuration : combinedClasspathConfigurations){
-			componentConfiguration.getConfigurations().put(configuration.getConfigurationDescriptor().getName(), configuration);
-		}
-		componentConfiguration.getResources().putAll(resolveResources(criteria));
-		return componentConfiguration;
+		componentConfigurationBuilder.withConfigurations(combinedClasspathConfigurationResolver.resolve(resourceProviders));
+		componentConfigurationBuilder.withResources(resolveResources(criteria));
+		return componentConfigurationBuilder.build();
 	}
 	
 	@Override
@@ -198,7 +194,6 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 		return variables;
 	}
 	
-	//TODO find a better name for this
 	public static class Criteria {
 		private final String componentName;
 		private final String environment;

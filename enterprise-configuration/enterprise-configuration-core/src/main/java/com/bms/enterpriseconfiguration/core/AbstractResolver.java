@@ -85,7 +85,7 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 			handlePostresolutionTestResults(postresolutionTestResults);
 		}
 		
-		int numPostresolutionActivities = getPostresolutionTests().size();
+		int numPostresolutionActivities = getPostresolutionActivities().size();
 		if(numPostresolutionActivities > 0){
 			logger.info("Executing " + numPostresolutionActivities + " postresolution activities in " + thisClassName);
 			List<ResolutionActivity<O>> sortedPostresolutionActivities = Lists.newArrayList(getPostresolutionActivities());
@@ -218,16 +218,16 @@ public abstract class AbstractResolver<I,O> implements Resolver<I,O> {
 		logger.fine("loading preresolution activities in " + thisClassName);
 		Optional<Class<? extends Annotation>> preresolutionActivityAnnotationClass = getPreresolutionActivityAnnotationClass();
 		if(preresolutionActivityAnnotationClass.isPresent()){
-			Set<Class<?>> preresolutionActivitiess = REFLECTIONS.getTypesAnnotatedWith(preresolutionActivityAnnotationClass.get());
-			for(Class<?> preresolutionActivityClass : preresolutionActivitiess){
+			Set<Class<?>> preresolutionActivities = REFLECTIONS.getTypesAnnotatedWith(preresolutionActivityAnnotationClass.get());
+			for(Class<?> preresolutionActivityClass : preresolutionActivities){
 				this.addPreresolutionActivity((ResolutionActivity<I>) preresolutionActivityClass.getConstructor().newInstance());
 			}
 		}
 		logger.fine("loading postresolution activities in " + thisClassName);
 		Optional<Class<? extends Annotation>> postresolutionActivityAnnotationClass = getPostresolutionActivityAnnotationClass();
 		if(postresolutionActivityAnnotationClass.isPresent()){
-			Set<Class<?>> postresolutionActivitiess = REFLECTIONS.getTypesAnnotatedWith(postresolutionActivityAnnotationClass.get());
-			for(Class<?> postresolutionActivityClass : postresolutionActivitiess){
+			Set<Class<?>> postresolutionActivities = REFLECTIONS.getTypesAnnotatedWith(postresolutionActivityAnnotationClass.get());
+			for(Class<?> postresolutionActivityClass : postresolutionActivities){
 				this.addPostresolutionActivity((ResolutionActivity<O>) postresolutionActivityClass.getConstructor().newInstance());
 			}
 		}
