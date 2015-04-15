@@ -20,6 +20,8 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.reflect.Reflection;
 
+import static com.google.common.base.Preconditions.*;
+
 
 public class ComponentConfigurationManager {
 	private static final Logger LOGGER = Logger.getLogger(ComponentConfigurationManager.class.getName());
@@ -51,7 +53,7 @@ public class ComponentConfigurationManager {
 	}
 	
 	public static ClasspathResource getResource(final String componentName, final String resourceName, final String environment){
-		return COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.get(environment).get(componentName).getResource(resourceName);
+		return getComponentConfiguration(componentName, environment).getResource(resourceName);
 	}
 	
 	public static FileBasedConfiguration<ClasspathResource> getConfiguration(final String configurationName) {
@@ -67,6 +69,16 @@ public class ComponentConfigurationManager {
 	}
 	
 	public static ComponentConfiguration getComponentConfiguration(String componentName, String environment){
+		checkNotNull(componentName, "The componentName can not be null!");
+		checkNotNull(environment, "The environment can not be null!");
+		if(!COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.containsKey(environment)){
+			LOGGER.severe("There are no component configurations loaded for environment: " + environment);
+			throw new RuntimeException("There are no component configurations loaded for environment: " + environment);
+		}
+		if(!COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.get(environment).containsKey(componentName)){
+			LOGGER.severe("There are no component configurations loaded for component name: " + componentName);
+			throw new RuntimeException("There are no component configurations loaded for component name: " + componentName);
+		}
 		return COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.get(environment).get(componentName);
 	}
 	
