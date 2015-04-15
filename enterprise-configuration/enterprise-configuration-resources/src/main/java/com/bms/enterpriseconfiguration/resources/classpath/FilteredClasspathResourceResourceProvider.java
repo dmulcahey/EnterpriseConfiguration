@@ -51,7 +51,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 				}
 			}
 			CLASSPATH = ClassPath.from(Thread.currentThread().getContextClassLoader());
-		}catch(Exception e){
+		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

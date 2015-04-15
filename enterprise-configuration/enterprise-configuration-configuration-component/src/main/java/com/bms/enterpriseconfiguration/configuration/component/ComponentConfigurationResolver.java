@@ -27,6 +27,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class ComponentConfigurationResolver extends AbstractResolver<ComponentConfigurationResolver.Criteria, ComponentConfiguration>{
+	
+	public static final String ENVIRONMENT_JVM_ARGUMENT = "server.env";
+	public static final String DEFAULT_ENVIRONMENT = System.getProperty(ENVIRONMENT_JVM_ARGUMENT);
+	
 	public static final String COMPONENT_NAME = "componentName";
 	public static final String ENVIRONMENT = "environment";
 	public static final String ENVIRONMENT_RESOURCES = "EnvironmentResources";
