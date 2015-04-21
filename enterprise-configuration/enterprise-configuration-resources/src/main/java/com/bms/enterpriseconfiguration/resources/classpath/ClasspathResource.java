@@ -14,6 +14,9 @@ public class ClasspathResource extends AbstractResource {
 	
 	private ResourceInfo resourceInfo;
 	
+	public ClasspathResource(){
+	}
+	
 	public ClasspathResource(ResourceInfo resourceInfo, ResourceProvider<?> resourceProvider) {
 		super(resourceProvider);
 		this.resourceInfo = resourceInfo;

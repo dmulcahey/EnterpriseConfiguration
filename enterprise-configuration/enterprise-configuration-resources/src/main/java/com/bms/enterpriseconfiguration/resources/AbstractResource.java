@@ -48,6 +48,9 @@ public abstract class AbstractResource {
 	
 	private ResourceProvider<?> resourceProvider;
 	
+	public AbstractResource(){
+	}
+	
 	public AbstractResource(ResourceProvider<?> resourceProvider) {
 		super();
 		this.resourceProvider = resourceProvider;
