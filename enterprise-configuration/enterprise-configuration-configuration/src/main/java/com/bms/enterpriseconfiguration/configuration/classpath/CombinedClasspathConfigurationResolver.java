@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.MergeCombiner;
+import org.apache.commons.configuration2.tree.UnionCombiner;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptor;
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
@@ -26,12 +28,17 @@ public class CombinedClasspathConfigurationResolver extends AbstractClasspathCon
 
 	@Override
 	protected CombinedClasspathConfiguration resolveClasspathPropertiesConfiguration(ConfigurationDescriptor<ClasspathResource> configurationDescriptor) throws ConfigurationException {
+		List<ClasspathResource> classpathResources = Lists.newArrayList(configurationDescriptor.getResources());
 		CombinedClasspathConfiguration combinedClasspathConfiguration = new CombinedClasspathConfiguration();
 		combinedClasspathConfiguration.setCombinedConfigurationDescriptor(configurationDescriptor);
-		List<ClasspathResource> classpathResources = Lists.newArrayList(configurationDescriptor.getResources());
 		Collections.sort(classpathResources, Collections.reverseOrder(new ResourceOrdering()));
 		for(ClasspathResource classpathResource : classpathResources){
 			combinedClasspathConfiguration.addConfiguration(CommonsConfigurationUtil.buildConfiguration(classpathResource));
+		}
+		if(combinedClasspathConfiguration.containsKey(CombinedClasspathConfiguration.USE_UNION_COMBINER)){
+			combinedClasspathConfiguration.setNodeCombiner(new UnionCombiner());
+		}else if(combinedClasspathConfiguration.containsKey(CombinedClasspathConfiguration.USE_MERGE_COMBINER)){
+			combinedClasspathConfiguration.setNodeCombiner(new MergeCombiner());
 		}
 		return combinedClasspathConfiguration;
 	}

@@ -28,6 +28,9 @@ public class CombinedClasspathConfiguration extends org.apache.commons.configura
 	private Set<String> importedConfigurations = Sets.newHashSet();
 	private static final Map<String, Lookup> LOOKUPS = Maps.newHashMap();
 	
+	public static final String USE_UNION_COMBINER = "CfgMgr.useUnionCombiner";
+	public static final String USE_MERGE_COMBINER = "CfgMgr.useMergeCombiner";
+	
 	static{
 		LOOKUPS.put("decrypt", new DecryptionLookup());
 	}
