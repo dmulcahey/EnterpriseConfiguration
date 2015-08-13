@@ -3,6 +3,8 @@ package com.bms.enterpriseconfiguration.configuration.classpath.util;
 public class PropertyUtil {
 
 	public static final String PREFIX = "PU";
+	public static final String ENVIRONMENT_JVM_ARGUMENT = "server.env";
+	public static final String ENVIRONMENT_JVM_ARGUMENT_ALIAS = "env.name";
 	
 	private PropertyUtil(){
 	}
@@ -22,7 +24,11 @@ public class PropertyUtil {
 	}
 	
 	public static String getServerEnvironment(){
-		return System.getProperty("server.env");
+		if(System.getProperties().containsKey(ENVIRONMENT_JVM_ARGUMENT)){
+			return System.getProperty(ENVIRONMENT_JVM_ARGUMENT);
+		}else{
+			return System.getProperty(ENVIRONMENT_JVM_ARGUMENT_ALIAS);
+		}
 	}
 	
 	public static String getServerEnvironmentNoZero(){

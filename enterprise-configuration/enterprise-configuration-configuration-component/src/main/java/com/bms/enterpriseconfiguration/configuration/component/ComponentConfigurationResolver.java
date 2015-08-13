@@ -10,6 +10,7 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 
 import com.bms.enterpriseconfiguration.configuration.ConfigurationDescriptorResolver;
 import com.bms.enterpriseconfiguration.configuration.classpath.CombinedClasspathConfigurationResolver;
+import com.bms.enterpriseconfiguration.configuration.classpath.util.PropertyUtil;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionActivity;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPostresolutionTest;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPreresolutionActivity;
@@ -26,9 +27,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 public class ComponentConfigurationResolver extends AbstractResolver<ComponentConfigurationResolver.Criteria, ComponentConfiguration>{
-	
-	public static final String ENVIRONMENT_JVM_ARGUMENT = "server.env";
-	public static final String DEFAULT_ENVIRONMENT = System.getProperty(ENVIRONMENT_JVM_ARGUMENT);
+	public static final String DEFAULT_ENVIRONMENT = PropertyUtil.getServerEnvironment();
 	
 	public static final String COMPONENT_NAME = "componentName";
 	public static final String ENVIRONMENT = "environment";

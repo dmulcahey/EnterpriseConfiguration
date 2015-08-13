@@ -97,34 +97,36 @@ public class ComponentConfigurationManager {
 		initialize();
 	}
 	
+	static void noOp(){}
+	
 	@SneakyThrows
 	private static void initialize(){
 		LOGGER.info("initializing started...");
 		Set<String> componentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.COMPONENT_RESOURCES);
-		LOGGER.fine("Components on classpath: " + componentNames);
+		LOGGER.info("Components on classpath: " + componentNames);
 		if(componentNames.size() == 1){
 			DEFAULT_COMPONENT_NAME = Optional.of(componentNames.iterator().next());
-			LOGGER.fine("Default component name set to: " + DEFAULT_COMPONENT_NAME.get());
+			LOGGER.info("Default component name set to: " + DEFAULT_COMPONENT_NAME.get());
 		}
 		if(!Strings.isNullOrEmpty(ComponentConfigurationResolver.DEFAULT_ENVIRONMENT)){
 			LOGGER.info("Default environment detected - Component configurations will only be initialized for the " + ComponentConfigurationResolver.DEFAULT_ENVIRONMENT + " environment");
 			initializeComponentConfigurationsForEnvironment(componentNames, ComponentConfigurationResolver.DEFAULT_ENVIRONMENT);
 		}else{
 			Set<String> environmentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.ENVIRONMENT_RESOURCES);
-			LOGGER.fine("Environments on classpath: " + environmentNames);
+			LOGGER.info("Environments on classpath: " + environmentNames);
 			for(String environmentName : environmentNames){
 				initializeComponentConfigurationsForEnvironment(componentNames, environmentName);
 			}
 		}
-		LOGGER.fine("All fully resolved component configurations by environment: " + COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT);
+		LOGGER.info("All fully resolved component configurations by environment: " + COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT);
 		LOGGER.info("initializing complete!");
 	}
 	
 	private static void initializeComponentConfigurationsForEnvironment(Set<String> componentNames, String environmentName){
-		LOGGER.config("Initializing component configurations for environment: " + environmentName);
+		LOGGER.info("Initializing component configurations for environment: " + environmentName);
 		ConcurrentHashMap<String, ComponentConfiguration> componentConfigurations = new ConcurrentHashMap<String, ComponentConfiguration>();
 		for(String componentName : componentNames){
-			LOGGER.config("Initializing component configuration: " + componentName + " for environment: " + environmentName);
+			LOGGER.info("Initializing component configuration: " + componentName + " for environment: " + environmentName);
 			componentConfigurations.put(componentName, COMPONENT_CONFIGURATION_RESOLVER.resolve(new ComponentConfigurationResolver.Criteria(componentName, environmentName)));
 		}
 		COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT.put(environmentName, componentConfigurations);
