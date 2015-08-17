@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.bms</groupId>
 		<artifactId>enterprise-configuration</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2</version>
 	</parent>
 
 	<artifactId>enterprise-configuration-core</artifactId>
@@ -16,10 +16,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<!-- <repositories> <repository> <snapshots> <enabled>true</enabled> </snapshots> 
-		<id>apache-snapshots</id> <name>Apache Snapshots</name> <url>https://repository.apache.org/content/repositories/snapshots/</url> 
-		</repository> </repositories> -->
 
 	<dependencies>
 		<dependency>
@@ -43,8 +39,6 @@
 			<version>1.10.16</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-configuration2</artifactId> 
-			<version>2.0-alpha1-SNAPSHOT</version> </dependency> -->
 	</dependencies>
 
 </project>
