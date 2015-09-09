@@ -24,10 +24,12 @@ import static com.google.common.base.Preconditions.*;
 
 
 public class ComponentConfigurationManager {
+	public static final String FORCE_COMPLETE_INITIALIZATION_ARGUMENT = "cfgmgr.forceCompleteInitialization";
 	private static final Logger LOGGER = Logger.getLogger(ComponentConfigurationManager.class.getName());
 	private static final ComponentConfigurationResolver COMPONENT_CONFIGURATION_RESOLVER = new ComponentConfigurationResolver();
 	private static final Map<String, Map<String, ComponentConfiguration>> COMPONENT_CONFIGURATIONS_BY_ENVIRONMENT = new ConcurrentHashMap<String, Map<String, ComponentConfiguration>>();
 	private static Optional<String> DEFAULT_COMPONENT_NAME;
+	private static Optional<String> FORCE_COMPLETE_INITIALIZATION;
 	
 	static{
 		registerMXBean();
@@ -102,17 +104,21 @@ public class ComponentConfigurationManager {
 	@SneakyThrows
 	private static void initialize(){
 		LOGGER.info("initializing started...");
+		FORCE_COMPLETE_INITIALIZATION = Optional.fromNullable(System.getProperty(FORCE_COMPLETE_INITIALIZATION_ARGUMENT));
 		Set<String> componentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.COMPONENT_RESOURCES);
 		LOGGER.info("Components on classpath: " + componentNames);
 		if(componentNames.size() == 1){
 			DEFAULT_COMPONENT_NAME = Optional.of(componentNames.iterator().next());
 			LOGGER.info("Default component name set to: " + DEFAULT_COMPONENT_NAME.get());
 		}
-		if(!Strings.isNullOrEmpty(ComponentConfigurationResolver.DEFAULT_ENVIRONMENT)){
+		if(!Strings.isNullOrEmpty(ComponentConfigurationResolver.DEFAULT_ENVIRONMENT) && !FORCE_COMPLETE_INITIALIZATION.isPresent()){
 			LOGGER.info("Default environment detected - Component configurations will only be initialized for the " + ComponentConfigurationResolver.DEFAULT_ENVIRONMENT + " environment");
 			initializeComponentConfigurationsForEnvironment(componentNames, ComponentConfigurationResolver.DEFAULT_ENVIRONMENT);
 		}else{
 			Set<String> environmentNames = ClasspathResourceUtil.getSubdirectoryNamesFromParentDirectory(ComponentConfigurationResolver.ENVIRONMENT_RESOURCES);
+			if(environmentNames.isEmpty()){
+				throw new RuntimeException("There were no environment resources detected on the classpath. Please check the classpath / jvm arguments to ensure they are correct!");
+			}
 			LOGGER.info("Environments on classpath: " + environmentNames);
 			for(String environmentName : environmentNames){
 				initializeComponentConfigurationsForEnvironment(componentNames, environmentName);
