@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.logging.Logger;
 
 import org.jasypt.util.text.StrongTextEncryptor;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.bms.enterpriseconfiguration.configuration.FileBasedConfiguration;
@@ -39,6 +40,7 @@ public class ComponentConfigurationManagerTest {
 	}
 	
 	@Test
+	@Ignore
 	public void encryptValue(){
 		StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
 		textEncryptor.setPassword("TESTING");
