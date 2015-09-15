@@ -28,6 +28,7 @@ public class ComponentResourcesExistPreresolutionTest implements ResolutionTest<
 				.withResourceFilter(new PathFilter(StrSubstitutor.replace(ComponentConfigurationResolver.COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables)))
 				.withResourceFilter(new NotFilter(new PathFilter(ComponentConfigurationResolver.ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR)))
 				.withResourceFilter(extensionFilter)
+				.withClassPath(input.getClassPath())
 				.build();
 		if(componentResourcesProvider.getResources().isEmpty()){
 			result.setErrorMessage("There were no component resources found for component: " + input.getComponentName() + ". Ensure that your classpath is correct!");

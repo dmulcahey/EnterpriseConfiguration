@@ -26,6 +26,7 @@ public class EnvironmentResourcesExistPreresolutionTest implements ResolutionTes
 				.order(200)
 				.withResourceFilter(new PathFilter(StrSubstitutor.replace(ComponentConfigurationResolver.ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE, variables)))
 				.withResourceFilter(extensionFilter)
+				.withClassPath(input.getClassPath())
 				.build();
 		if(environmentResourcesProvider.getResources().isEmpty()){
 			result.setErrorMessage("No environment resources found for environment: " + input.getEnvironment() + ". Ensure that the classpath is correct!");

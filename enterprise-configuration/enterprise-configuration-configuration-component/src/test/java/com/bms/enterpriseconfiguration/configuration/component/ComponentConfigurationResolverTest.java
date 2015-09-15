@@ -5,14 +5,19 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.logging.Logger;
 
+import lombok.SneakyThrows;
+
 import org.junit.Test;
+
+import com.bms.enterpriseconfiguration.resources.classpath.ClassPath;
 
 public class ComponentConfigurationResolverTest {
 
 	@Test
+	@SneakyThrows
 	public void testComponentConfigurationResolver(){
 		ComponentConfigurationResolver componentConfigurationResolver = new ComponentConfigurationResolver();
-		ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria("Configuration", "JUNIT");
+		ComponentConfigurationResolver.Criteria criteria = new ComponentConfigurationResolver.Criteria("Configuration", "JUNIT", ClassPath.from(Thread.currentThread().getContextClassLoader()));
 		ComponentConfiguration componentConfiguration = componentConfigurationResolver.resolve(criteria);
 		assertNotNull(componentConfiguration);
 		Logger.getAnonymousLogger().info(componentConfiguration.toString());

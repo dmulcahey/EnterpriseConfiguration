@@ -26,6 +26,7 @@ public class EnvironmentOverrideResourcesExistPreresolutionTest implements Resol
 				.order(400)
 				.withResourceFilter(new PathFilter(StrSubstitutor.replace(ComponentConfigurationResolver.ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE, variables)))
 				.withResourceFilter(extensionFilter)
+				.withClassPath(input.getClassPath())
 				.build();
 		
 		if(!environmentOverridesResourcesProvider.getResources().isEmpty()){

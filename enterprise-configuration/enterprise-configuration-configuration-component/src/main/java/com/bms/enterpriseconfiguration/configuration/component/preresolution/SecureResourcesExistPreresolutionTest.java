@@ -27,6 +27,7 @@ public class SecureResourcesExistPreresolutionTest implements ResolutionTest<Cri
 				.secure(true)
 				.withResourceFilter(new PathFilter(StrSubstitutor.replace(ComponentConfigurationResolver.SECURE_RESOURCES_LOCATOR_TEMPLATE, variables)))
 				.withResourceFilter(extensionFilter)
+				.withClassPath(input.getClassPath())
 				.build();
 		if(secureResourcesProvider.getResources().isEmpty()){
 			result.setWarningMessage("There were no secure resources detected for component: " + input.getComponentName() + " in environment: " + input.getEnvironment());

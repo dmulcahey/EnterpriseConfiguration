@@ -16,6 +16,7 @@ import com.bms.enterpriseconfiguration.configuration.component.annotation.Compon
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPreresolutionActivity;
 import com.bms.enterpriseconfiguration.configuration.component.annotation.ComponentConfigurationResolverPreresolutionTest;
 import com.bms.enterpriseconfiguration.core.AbstractResolver;
+import com.bms.enterpriseconfiguration.resources.classpath.ClassPath;
 import com.bms.enterpriseconfiguration.resources.classpath.ClasspathResource;
 import com.bms.enterpriseconfiguration.resources.classpath.FilteredClasspathResourceResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ExtensionFilter;
@@ -86,6 +87,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(100)
 			.withResourceFilter(new PathFilter(SHARED_RESOURCES_LOCATOR))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		resourceProviders.add(sharedResourcesProvider);
 		
@@ -93,6 +95,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(200)
 			.withResourceFilter(new PathFilter(StrSubstitutor.replace(ENVIRONMENT_RESOURCES_LOCATOR_TEMPLATE, variables)))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		resourceProviders.add(environmentResourcesProvider);
 		
@@ -101,6 +104,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.withResourceFilter(new PathFilter(StrSubstitutor.replace(COMPONENT_RESOURCES_LOCATOR_TEMPLATE, variables)))
 			.withResourceFilter(new NotFilter(new PathFilter(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR)))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		resourceProviders.add(componentResourcesProvider);
 		
@@ -108,6 +112,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(400)
 			.withResourceFilter(new PathFilter(StrSubstitutor.replace(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR_TEMPLATE, variables)))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		resourceProviders.add(environmentOverridesResourcesProvider);
 		
@@ -116,6 +121,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.secure(true)
 			.withResourceFilter(new PathFilter(StrSubstitutor.replace(SECURE_RESOURCES_LOCATOR_TEMPLATE, variables)))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		resourceProviders.add(secureResourcesProvider);
 		
@@ -131,6 +137,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(100)
 			.withResourceFilter(new PathFilter(SHARED_RESOURCES_LOCATOR))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		
 		for(ClasspathResource resource : sharedResourcesProvider.getResources()){
@@ -142,6 +149,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(200)
 			.withResourceFilter(new PathFilter(environmentResourcesLocator))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		
 		for(ClasspathResource resource : environmentResourcesProvider.getResources()){
@@ -154,6 +162,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.withResourceFilter(new PathFilter(componentResourceLocator))
 			.withResourceFilter(new NotFilter(new PathFilter(ENVIRONMENT_OVERRIDES_RESOURCES_LOCATOR)))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		
 		for(ClasspathResource resource : componentResourcesProvider.getResources()){
@@ -165,6 +174,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.order(400)
 			.withResourceFilter(new PathFilter(environmentOverrideResourcesLocator))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		
 		for(ClasspathResource resource : environmentOverridesResourcesProvider.getResources()){
@@ -177,6 +187,7 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			.secure(true)
 			.withResourceFilter(new PathFilter(secureResourcesLocator))
 			.withResourceFilter(extensionFilter)
+			.withClassPath(criteria.getClassPath())
 			.build();
 		
 		for(ClasspathResource resource : secureResourcesProvider.getResources()){
@@ -196,13 +207,15 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 	public static class Criteria {
 		private final String componentName;
 		private final String environment;
+		private final ClassPath classPath;
 		
-		public Criteria(String componentName, String environment) {
+		public Criteria(String componentName, String environment, ClassPath classPath) {
 			super();
 			checkNotNull(componentName, "componentName is required");
 			checkNotNull(environment, "environment is required");
 			this.componentName = componentName;
 			this.environment = environment;
+			this.classPath = classPath;
 		}
 
 		public String getComponentName() {
@@ -213,6 +226,10 @@ public class ComponentConfigurationResolver extends AbstractResolver<ComponentCo
 			return environment;
 		}
 		
+		public ClassPath getClassPath() {
+			return classPath;
+		}
+
 		@Override
 		public String toString() {
 			return "Criteria [componentName=" + componentName

@@ -1,60 +1,20 @@
 package com.bms.enterpriseconfiguration.resources.classpath;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Set;
-
-import lombok.extern.java.Log;
 
 import com.bms.enterpriseconfiguration.resources.ResourceProvider;
 import com.bms.enterpriseconfiguration.resources.classpath.ClassPath.ResourceInfo;
 import com.bms.enterpriseconfiguration.resources.classpath.filter.ResourceFilter;
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-@Log
 public class FilteredClasspathResourceResourceProvider implements ResourceProvider<Set<ClasspathResource>> {
 
-	private static final ClassPath CLASSPATH;
-	private static final Class<?>[] PARAMETERS = new Class<?>[] {URL.class};
-	
+	private final ClassPath classPath;
 	private Set<ResourceFilter> resourceFilters;
 	private int order = 0;
 	private boolean secure;
-	
-	static{
-		try{
-			String classpathAugment = System.getProperty("cfgmgr.classpath");
-			if(!Strings.isNullOrEmpty(classpathAugment)){
-				String[] pathAugmentsToAdd = classpathAugment.split(File.pathSeparator);
-				URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		        Class<URLClassLoader> sysclass = URLClassLoader.class;
-		        Method method = null;
-		        try {
-		        	method = sysclass.getDeclaredMethod("addURL", PARAMETERS);
-		        }catch(Exception e){
-		        	throw new RuntimeException("Error, can not augment system classloader!", e);
-		        }
-	            method.setAccessible(true);
-				for(String classpathAugmentToAdd : pathAugmentsToAdd){
-					try {
-			            method.invoke(sysloader, new Object[] {new File(classpathAugmentToAdd).toURI().toURL()});
-			            log.info("Augmented runtime classpath: " + classpathAugmentToAdd + " was added to the System class loader...");
-			        } catch (Throwable t) {
-			            t.printStackTrace();
-			            throw new RuntimeException("Error, could not add url to system classloader: " + classpathAugmentToAdd);
-			        }
-				}
-			}
-			CLASSPATH = ClassPath.from(Thread.currentThread().getContextClassLoader());
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 	
 	public static Builder builder(){
 		return new Builder();
@@ -72,7 +32,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 
 	@Override
 	public Set<ClasspathResource> getResources() {
-		Set<ResourceInfo> resources = Sets.filter(CLASSPATH.getResources(), new Predicate<ResourceInfo>(){
+		Set<ResourceInfo> resources = Sets.filter(classPath.getResources(), new Predicate<ResourceInfo>(){
 			@Override
 			public boolean apply(ResourceInfo resourceInfo) {
 				boolean accept = true;
@@ -93,6 +53,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 		private int order = 0;
 		private boolean secure;
 		private Set<ResourceFilter> resourceFilters = Sets.newHashSet();
+		private ClassPath classPath;
 		
 		private Builder(){
 			
@@ -113,7 +74,15 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 			return this;
 		}
 		
+		public Builder withClassPath(ClassPath classPath){
+			this.classPath = classPath;
+			return this;
+		}
+		
 		public FilteredClasspathResourceResourceProvider build(){
+			if(this.classPath == null){
+				throw new RuntimeException("FilteredClasspathResourceResourceProvider cannot be built without a ClassPath!");
+			}
 			return new FilteredClasspathResourceResourceProvider(this);
 		}
 		
@@ -123,6 +92,7 @@ public class FilteredClasspathResourceResourceProvider implements ResourceProvid
 		this.order = builder.order;
 		this.secure = builder.secure;
 		this.resourceFilters = ImmutableSet.copyOf(builder.resourceFilters);
+		this.classPath = builder.classPath;
 	}
 	
 }

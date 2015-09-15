@@ -21,6 +21,7 @@ public class SharedResourcesExistPreresolutionTest implements ResolutionTest<Cri
 				.order(100)
 				.withResourceFilter(new PathFilter(ComponentConfigurationResolver.SHARED_RESOURCES_LOCATOR))
 				.withResourceFilter(extensionFilter)
+				.withClassPath(input.getClassPath())
 				.build();
 		if(sharedResourcesProvider.getResources().isEmpty()){
 			result.setErrorMessage("There were no shared resources detected. Ensure that the classpath is correct!");
